@@ -1,0 +1,29 @@
+﻿<div id="productBrowser">
+    <div class="modal-header">
+        <h3 class="modal-title">Products Selector</h3>
+    </div>
+    <div class="modal-body" data-ng-init="initialize()">
+        <table style="width:800px;">
+            <tr>
+                <td style="vertical-align:top;width:40%;">
+                    <h3>Products Type</h3><br />
+                    <div class="valueField">
+                        <select data-ng-model="Selected.SelectedTemplate" ng-options="v as v.Name for v in templates"></select>
+                    </div>
+                </td>
+                <td style="width:60%;vertical-align:top;">
+                    <h3>Result Products</h3>
+                    <div class="valueField">
+                        <input type="text" name="productsSearchBox" id="productsSearchBox" placeholder="Search Products" data-ng-model="productSearchText.Name">
+                        <ul id="productsTree_productSelector" class="list-group" style="height:400px;overflow:auto;border:1px solid #ccc;">
+                            <li data-ng-repeat="p in Products | orderBy:'BrandFactoryType':true | filter:productSearchText" class="list-group-item"><a ng-click="ok(p.Id)">{{p.Name}}</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+    </div>
+</div>

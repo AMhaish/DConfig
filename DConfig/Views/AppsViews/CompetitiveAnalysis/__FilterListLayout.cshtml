@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/AppsViews/CompetitiveAnalysis/_ProductsManagerLayout.cshtml";
+}
+@section ListMenu{
+    <div class="subMenuContainer">
+        <div class="filterListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+        <div id="subMenuOpenCloseBtnCon"><i id="subMenuOpenCloseBtn" class="fa fa-caret-left"></i></div>
+    </div>
+}
+@section DetailsTopMenu{
+    @RenderSection("DetailsTopMenu", false)
+}
+@section Details{
+    @RenderSection("Details", false)
+}
+@RenderBody()

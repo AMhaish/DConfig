@@ -1,0 +1,103 @@
+﻿@model DConfigOS_Core.Providers.HttpContextProviders.DConfigFormModel
+<div class="singleFormContainer" id="multipleSameChildFormContainer">
+    <form method="post" enctype="multipart/form-data"
+          action="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ?
+          "/DConfig/FormsAPI/SubmitForm/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&": "") + "PageUrl=" + Model.PageUrl
+          :
+          (Model.PageForm.CustomSubmitPath.Contains('?') ?
+            Model.PageForm.CustomSubmitPath.Substring(0, Model.PageForm.CustomSubmitPath.IndexOf('?')) + "/" + Model.PageForm.Id + Model.PageForm.CustomSubmitPath.Substring(Model.PageForm.CustomSubmitPath.IndexOf('?'), Model.PageForm.CustomSubmitPath.Length - Model.PageForm.CustomSubmitPath.IndexOf('?')) + "&" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl
+            :
+            Model.PageForm.CustomSubmitPath + "/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl))">
+        @if (!Model.IsValid)
+        {
+            @Html.ValidationSummary(true)
+        }
+        <div>
+            @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", Model)
+            <input type="hidden" id="DConfigChildrenIndexes" name="DConfigChildrenIndexes" />
+            <div id="children" class="tab-content">
+                <div class="_child _child0">
+                    @if (Model.ChildrenModels != null && Model.ChildrenModels.Count > 0)
+                    {
+                        @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", Model.ChildrenModels[0])
+                    }
+                    <input type="button" value="@(String.IsNullOrEmpty(Model.PageForm.RemoveItemButtonText) ? "Remove Item" : Model.PageForm.RemoveItemButtonText)" class="btn btn-default _removeChild" data-number="" />
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input id="addNewChildren" type="button" value="@(String.IsNullOrEmpty(Model.PageForm.AddItemButtonText) ? "Add Item" : Model.PageForm.AddItemButtonText)" class="btn btn-default" />
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+            <div class="row submitRow">
+                <div class="col-sm-6 fieldsText"></div>
+                <div class="col-sm-6">
+                    <input type="submit" value="@(String.IsNullOrEmpty(Model.PageForm.SubmitButtonText) ? "Submit" : Model.PageForm.SubmitButtonText)" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script id="children-template" type="text/x-custom-template">
+    <div class="_tempChild">
+        @if (Model.ChildrenModels != null && Model.ChildrenModels.Count > 0)
+        {
+            @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", Model.ChildrenModels[0])
+        }
+        <input type="button" value="@(String.IsNullOrEmpty(Model.PageForm.RemoveItemButtonText) ? "Remove Item" : Model.PageForm.RemoveItemButtonText)" class="btn btn-default _removeChild" data-number="" />
+    </div>
+    
+</script>
+@if (Model.ChildrenModels != null && Model.ChildrenModels.Count > 0)
+{
+    <script type="text/javascript">
+        var currentIndex = 0;
+        var childFormName = '@(Model.ChildrenModels[0].PageForm.Name)';
+        $(document).ready(function () {
+            //initialize zero child
+            $('._child0').find('.form-control').each(function () {
+                var currentObj = $(this);
+                var currentName = currentObj.attr('name');
+                currentObj.attr('name', currentName.replace(childFormName, childFormName + currentIndex.toString()));
+            });
+            $('#DConfigChildrenIndexes').val(JSON.stringify([0]));
+            $('._child0').find('._removeChild').click(removeChild);
+            $('#addNewChildren').click(function () {
+                currentIndex++;
+                var template = $('#children-template').html();
+                $('#children').append(template);
+                var newChild = $('._tempChild');
+                newChild.removeClass('_tempChild');
+                newChild.addClass('_child');
+                newChild.addClass('_child' + currentIndex.toString());
+                $('._child' + currentIndex.toString()).find('.form-control').each(function () {
+                    var currentObj = $(this);
+                    var currentName = currentObj.attr('name');
+                    currentObj.attr('name', currentName.replace(childFormName, childFormName + currentIndex.toString()));
+                });
+                $('._child' + currentIndex.toString()).find('._removeChild').attr('data-number', currentIndex);
+                $('._child' + currentIndex.toString()).find('._removeChild').click(removeChild);
+                var hiddenIndexes = JSON.parse($('#DConfigChildrenIndexes').val());
+                hiddenIndexes.push(currentIndex);
+                $('#DConfigChildrenIndexes').val(JSON.stringify(hiddenIndexes));
+            });
+        });
+        function removeChild() {
+            var currentObj = $(this);
+            var number = parseInt(currentObj.attr('data-number'));
+            $('._child' + number.toString()).remove();
+            var hiddenIndexes = JSON.parse($('#DConfigChildrenIndexes').val());
+            var index;
+            for (i = 0; i < hiddenIndexes.length; i++) {
+                if (hiddenIndexes[i] == number) {
+                    index = i;
+                    break;
+                }
+            }
+            hiddenIndexes.splice(index, 1);
+            $('#DConfigChildrenIndexes').val(JSON.stringify(hiddenIndexes));
+        }
+    </script>
+}

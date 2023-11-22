@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "~/Views/AppsViews/Membership/_MembershipLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.Name" />
+<a data-ng-click="displayCreateForm()"><i class="fa fa-plus"></i> Add Role</a>
+}
+@section DetailsTopMenu{
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.Info || state == DetailsPanelStates.Edit)}" data-ng-repeat="role in roles | filter:searchText">
+            <a data-ng-click="displayDetails($index)">{{role.Name}}</a><i class="fa fa-times extMenuChoice" data-ng-click="deleteRole($index)"></i><i class="fa fa-pencil extMenuChoice" data-ng-click="displayEditForm($index)"></i>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Roles</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="displayCreateForm()">Create New Role</a>
+            </div>
+        </div>
+        <div id="infoForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Info">
+            <div class="modal-header">
+                <h3 class="modal-title">Role Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                             <div class="form-group">
+                                 <input class="form-control" name="name" type="text" data-ng-model="currentRole.Name" value="" readonly="readonly" />
+                                 <label for="name">Role Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default"  data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="createForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Create">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Role</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" name="name" type="text" data-ng-model="currentRole.Name" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error"
+                                      ng-show="createForm.rolename.$dirty && createForm.rolename.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.rolename.$error.required">
+                                        Role name is required
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.rolename.$error.minlength">
+                                        Role name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.rolename.$error.maxlength">
+                                        Role name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Role Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Create" class="btn btn-primary" data-ng-click="createRole()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="editForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Edit">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Role</h3>
+            </div>
+            <div class="modal-body">
+                <form name="editForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" name="name" type="text" data-ng-model="currentRole.NewName" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error"
+                                      ng-show="editForm.roleName.$dirty && editForm.roleName.$invalid">
+                                    <small class="error"
+                                           ng-show="editForm.roleName.$error.required">
+                                        Role name is required
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.roleName.$error.minlength">
+                                        Role name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.roleName.$error.maxlength">
+                                        Role name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Role Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="editRole()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+    </div>
+}

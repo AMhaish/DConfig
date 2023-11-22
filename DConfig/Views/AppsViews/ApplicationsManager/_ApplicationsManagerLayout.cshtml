@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@section AppMenu{
+
+    @*<li data-ng-class="{ active: _CurrentPath == '/ApplicationsManager' }"><a href="#!/ApplicationsManager"><i class="fa fa-th-large fa-2x"></i>Installed Apps</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/ApplicationsManager/InstallApp' }"><a href="#!/ApplicationsManager/InstallApp"><i class="fa fa-cloud-download fa-2x"></i>Install App</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/ApplicationsManager/UploadApp' }"><a href="#!/ApplicationsManager/UploadApp"><i class="fa fa-upload fa-2x"></i>Upload App</a></li>*@
+    <li><a href="#!/ApplicationsManager"><span class="title">Installed Apps</span></a></li>
+    <li><a href="#!/ApplicationsManager/InstallApp"><span class="title">Install App</span></a></li>
+    <li><a href="#!/ApplicationsManager/UploadApp"><span class="title">Upload App</span></a></li>
+
+}
+@section AppContent{
+    <div class="subMenuContainer">
+        <div class="searchListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+    </div>
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+
+@RenderBody()

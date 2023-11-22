@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/AppsViews/ApplicationsManager/_ApplicationsManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.Name" />
+}
+@section DetailsTopMenu{
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.Info)}" data-ng-repeat="app in apps | filter:searchText">
+            <a data-ng-click="displayDetails($index)">{{app.Name}}</a><i class="fa fa-trash extMenuChoice" data-ng-click="uninstallApp($index)"></i>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="contentDetailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Info">
+            <div class="modal-header">
+                <h3 class="modal-title">App Details</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="app">
+                            <a><img src="{{currentObj.IconPath}}" />{{currentObj.DisplayName}}</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="textField">Installed Date</div>
+                        <div class="valueFiled">
+                            <input type="text" name="installedDate" data-ng-model="currentObj.InstalledDate" readonly="readonly" />
+                        </div>
+                        <div class="textField">Version</div>
+                        <div class="valueFiled">
+                            <input type="text" name="version" data-ng-model="currentObj.Version" readonly="readonly" />
+                        </div>
+                        <div class="textField">Built in App</div>
+                        <div class="valueFiled">
+                            <input type="checkbox" name="builtIn" data-ng-model="currentObj.BuiltInApp" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Installed Apps</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+    </div>
+}

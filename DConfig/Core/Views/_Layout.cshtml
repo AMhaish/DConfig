@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <title>SFS</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10" >
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/fonts.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
+    <link href="~/Content/fullcalendar.css" rel="stylesheet" />
+    <link href="~/Content/jquery.pnotify.default.css" rel="stylesheet" />
+    <link href="~/Content/jquery.ptTimeSelect.css" rel="stylesheet" />
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body id="ng-app" data-ng-app="SFS" data-ng-controller="RootController">
+    <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+    <header class="header">
+        <div class="RightHeader">
+            <ul class="">
+                <li class="item_in_Header" data-ng-class="{active : activeViewPath==='/home'}">
+                    <a href="#/" id="HomePageBtn">الرئيسية</a>
+                </li>
+                <li class="item_in_Header dropdown" data-ng-class="{active : activeViewPath==='/home'}">
+                    <a data-toggle="dropdown" class="dropdown-toggle" id="MainFunctionsMenuBtn">الوظائف</a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="MainFunctionsMenuBtn">
+                        <li role="presentation" class="">
+                            <a role="menuitem" href="#/citizens">التفييش</a>
+                        </li>
+                        <li role="presentation" class="dropdown-submenu dropdown-submenu-leftside">
+                            <a role="menuitem">الدوريات</a>
+                            <ul class="dropdown-menu pull-left">
+                                <li role="presentation"><a role="menuitem" href="#/patrols/patrols">إدارة الدوريات</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/patrols/missions">إدارة المهام</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/patrols/objects">إدارة الأنماط</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/patrols/calendar">المجدول</a></li>
+                            </ul>
+                        </li>
+                        <li role="presentation" class="dropdown-submenu dropdown-submenu-leftside">
+                            <a role="menuitem">الضبوط</a>
+                            <ul class="dropdown-menu pull-left">
+                                <li role="presentation"><a role="menuitem" href="#/cases/newcase">ضبط جديد</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/cases/searchforcase">بحث عن ضبط</a></li>
+
+                            </ul>
+                        </li>
+
+                        <li role="presentation" class="dropdown-submenu dropdown-submenu-leftside">
+                            <a role="menuitem">الموارد البشرية</a>
+                            <ul class="dropdown-menu pull-left">
+                                <li role="presentation"><a role="menuitem" href="#/hr/employees">إدارة الموظفين</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/hr/stations">إدارة المخافر</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/hr/permissionsgroups">مجموعات الصلاحيات</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/hr/roles">إدارة الأدوار</a></li>
+                                <li role="presentation"><a role="menuitem" href="#/hr/userlogins">إدارة المستخدمين</a></li>
+                                @*<li role="presentation"><a role="menuitem" href="#/hr/areaManagements">إدارات المناطق</a></li>*@
+                            </ul>
+                        </li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" href="#/tickets">نظام المراسلات</a></li>
+                    </ul>
+                </li>
+                <li class="item_in_Header dropdown" data-ng-class="{active : activeViewPath==='/demo'}">
+                    <a data-toggle="dropdown" class="dropdown-toggle" id="ReportsMenuBtn">التقارير</a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="ReportsMenuBtn">
+                        <li role="presentation"><a role="menuitem">تقرير 1</a></li>
+                        <li role="presentation"><a role="menuitem">تقرير 2</a></li>
+                        <li role="presentation"><a role="menuitem">تقرير 3</a></li>
+                    </ul>
+                </li>
+                <li class="item_in_Header dropdown" data-ng-class="{active : activeViewPath==='/citizens/create'}">
+                    <a data-toggle="dropdown" class="dropdown-toggle" id="AboutMenuBtn">حول البرنامج</a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="AboutMenuBtn">
+                        <li role="presentation"><a role="menuitem">حول الشام للبرمجيات</a></li>
+                        <li role="presentation"><a role="menuitem">كتيب الاستخدام</a></li>
+                        <li role="presentation"><a role="menuitem">حول الإصدار</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="LeftHeader">
+            <span class="wellcome">أهلاً الملازم أسعد سعدوني  </span>
+            <span class="settings dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" id="ConfigBtn">
+                    <img src="images/settingButton.png" /></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="ConfigBtn">
+                    <li role="presentation"><a role="menuitem" href="#/account/changeUserPassword">حساب المستخدم</a></li>
+                    <li role="presentation"><a role="menuitem">تسجيل خروج</a></li>
+                </ul>
+            </span>
+        </div>
+        <div class="LogoHeader">
+            <div class="LogoContent">
+                <span class="Logo">
+                    <img src="/Content/images/logo.png" />
+                </span>
+                <span class="LogoText">نظام الأمن العام</span>
+            </div>
+        </div>
+    </header>
+    @*<div id="taskDialog" class="Dialog">
+        <div>الدوريات</div>
+    </div>
+    <div id="ReportDialog" class="Dialog">
+    </div>
+    <div id="aboutDialog" class="Dialog">
+    </div>
+    <div id="settingsDialog">
+        <div id="innerSettingsDialog" class="Dialog">
+        </div>
+    </div>*@
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href='#/home'>SFS</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li data-ng-class="{active : activeViewPath==='/home'}"><a href='#/home'>Home</a></li>
+                        <li data-ng-class="{active : activeViewPath==='/demo'}"><a href="#/demo">Demo</a></li>
+                        <li data-ng-class="{active : activeViewPath==='/angular'}"><a href='#/angular'>Learn Angular</a></li>
+                        <li data-ng-class="{active : activeViewPath==='/about'}"><a href='#/about'>About</a></li>
+                        <li data-ng-class="{active : activeViewPath==='/contact'}"><a href='#/contact'>Contact</a></li>
+                        <li data-ng-class="{active : activeViewPath==='/citizens/create'}"><a href='#/citizens/create'>Create Citizen</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>*@
+    <div class="contentContainer">
+        <div class="BreadCrumbs">
+            <span data-ng-if="breadCrumps.path.length > 0">{{breadCrumps.path[0]}}
+            </span>
+            <span data-ng-if="breadCrumps.path.length > 1">
+                <span class="breadCrumpsArrow"></span>{{breadCrumps.path[1]}}
+            </span>
+            <span data-ng-if="breadCrumps.path.length > 2">
+                <span class="breadCrumpsArrow"></span>{{breadCrumps.path[2]}}
+            </span>
+            <span data-ng-if="breadCrumps.path.length > 3">
+                <span class="breadCrumpsArrow"></span>{{breadCrumps.path[3]}}
+            </span>
+            @RenderSection("breadCrumps", false)
+        </div>
+        <!--This is where the main views would get loaded for SPA
+    This page is the container page for all sub views that get loaded.
+    The sub views that would get loaded into ng-view would not inherit the master page, 
+    and hence would only send relevant html fargments to render specific views.-->
+        <div id="BODY" class="Content" data-ng-view="">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="loading" id="loading">
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-ui-1.9.2.custom.js"></script>
+    <script src="~/Scripts/nicEdit.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.form.js"></script>
+    @*  <script src="~/Scripts/jquery-migrate-1.2.1.js"></script>*@
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @Scripts.Render("~/bundles/angular")
+    <script src="~/Scripts/app/app.js"></script>
+    @Scripts.Render("~/bundles/app")
+    <script src="~/Scripts/fullcalendar.js"></script>
+    <script src="~/Scripts/jquery.pnotify.js"></script>
+    <script src="~/Scripts/jquery.ptTimeSelect.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

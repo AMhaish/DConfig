@@ -1,0 +1,244 @@
+﻿@using WebsiteManager.Properties
+@{
+    Layout = "~/Views/AppsViews/WebsiteManager/_WebsiteManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="viewTypesSearchBox" id="viewTypesSearchBox" />
+    <a data-ng-click="createNode()"><i class="fa fa-plus"></i> Add View Type</a>
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ViewTypeChildren }" data-ng-click="displayChildrenTypes()">Children Types</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ViewTypeFields }" data-ng-click="displayFields()">Variables</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ViewTypeDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="viewTypesTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ViewTypeDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">View Type Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="id" data-ng-model="currentObj.Id" readonly="readonly" />
+                                <label for="id">ID</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="publicViewsPackage" data-ng-model="currentObj.PublicViewsPackage.Name" value="" readonly="readonly" />
+                                <label for="publicViewsPackage">Public Views Package</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="fieldsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ViewTypeFields">
+            <div class="modal-header">
+                <h3 class="modal-title">View Type Fields</h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="ViewTypeAcc">
+                    <div class="card panel" data-ng-repeat="field in currentObj.ViewFields">
+                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#ViewTypeAcc" data-target="#Field{{$index}}">
+                            <header>{{field.Name}} </header>
+                            <div class="tools">
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-angle-down"></i>
+                                </a>
+                                <a class="btn btn-icon-toggle">
+                                    <i class="pull-right glyphicon fa fa-times" data-ng-click="removeField($index)"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="Field{{$index}}" class="collapse">
+                            <div class="card-body">
+                                <form name="fieldForm{{$index}}" class="form" novalidate>
+                                    <div class="form-group">
+                                        <input class="form-control" name="id" type="text" data-ng-model="field.Id" value="" readonly />
+                                        <label for="id">id</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" name="name" type="text" data-ng-model="field.Name" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.name.$dirty && fieldForm{{$index}}.name.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.required">
+                                                Field name is required.
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.minlength">
+                                                Field name is required to be at least 3 characters
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.maxlength">
+                                                Field name cannot be longer than 50 characters
+                                            </small>
+                                        </span>
+                                        <label for="name">Name</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="type" data-ng-model="field.Type" ng-options="v.Name as v.Name for v in FieldsTypes" required></select>
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.type.$dirty && fieldForm{{$index}}.type.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.required">
+                                                Field type is required.
+                                            </small>
+                                        </span>
+                                        <label for="type">Type</label>
+                                    </div>
+                                    <div class="form-group" data-ng-show="field.Type.contains('Predefined List')">
+                                        <select class="form-control" name="list" data-ng-model="field.EnumId" data-ng-options="v.Id as v.Name for v in Enums">
+                                            <option value=""></option>
+                                        </select>
+                                        <label for="list">Predefined List</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" name="columnname" type="text" data-ng-model="field.ColumnName" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.columnname.$dirty && fieldForm{{$index}}.columnname.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.columnname.$error.required">
+                                                Field column name is required.
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.columnname.$error.minlength">
+                                                Field column name is required to be at least 3 characters
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.columnname.$error.maxlength">
+                                                Field column name cannot be longer than 50 characters
+                                            </small>
+                                        </span>
+                                        <label for="columnname">Excel Column Name (for Import)</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div><!--end .panel -->
+                </div><!--end .panel-group -->
+                <br />
+                <input type="button" value="Add Field" class="btn btn-success" data-ng-click="addNewField()" />
+
+                <div data-open="false" data-drop-up="true">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Reorder Fields <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu"  role="menu" data-ui-sortable="SortableOptions" data-ng-model="currentObj.ViewFields">
+                        <li data-ng-repeat="field in currentObj.ViewFields"><div class="handle">{{field.Name}}<i class="pull-right glyphicon fa fa-arrows"></i></div></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveFields()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="childrenForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ViewTypeChildren">
+            <div class="modal-header">
+                <h3 class="modal-title">View Type Children</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="control-label">Children types</label>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-styled" data-ng-repeat="field in currentObj.Children">
+                                        <label>
+                                            <input type="checkbox" data-ng-model="field.Selected" />
+                                            <span>{{field.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChildren()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">View Types</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createNode()">Create New View Type</a>
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New View Type</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" type="text" data-ng-model="newNode.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

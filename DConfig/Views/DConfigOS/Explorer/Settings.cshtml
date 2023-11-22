@@ -1,0 +1,452 @@
+﻿<div class="row">
+    <div class="card">
+        <div class="settingsContainer">
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('General')"><img src="~/Content/DConfigOS/Explorer/settings/home153.png" />General</a>
+            </div>
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Identity')"><img src="~/Content/DConfigOS/Explorer/settings/eye106.png" />Identity</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Appearance')"><img src="~/Content/DConfigOS/Explorer/settings/website8.png" />Appearance</a>
+        </div>*@
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Email')"><img src="~/Content/DConfigOS/Explorer/settings/email29.png" />Email</a>
+            </div>
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('SMS')"><img src="~/Content/DConfigOS/Explorer/settings/sms.png" />SMS</a>
+            </div>
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Backup')"><img src="~/Content/DConfigOS/Explorer/settings/hosting.png" />Backup</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Database')"><img src="~/Content/DConfigOS/Explorer/settings/datastorage1.png" />Database</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('DateTime')"><img src="~/Content/DConfigOS/Explorer/settings/calendar68.png" />Date & Time</a>
+        </div>*@
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Languages')"><img src="~/Content/DConfigOS/Explorer/settings/character.png" />Languages</a>
+            </div>
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Security')"><img src="~/Content/DConfigOS/Explorer/settings/locked61.png" />Security</a>
+            </div>
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Notifications')"><img src="~/Content/DConfigOS/Explorer/settings/alarm52.png" />Notifications</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('SystemInfo')"><img src="~/Content/DConfigOS/Explorer/settings/speechbubble14.png" />System Info</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('SystemUpdate')"><img src="~/Content/DConfigOS/Explorer/settings/refresh57.png" />System Update</a>
+        </div>*@
+            @*<div class="settings">
+            <a data-ng-click="openSettingsPanel('Support')"><img src="~/Content/DConfigOS/Explorer/settings/tools6.png" />Support</a>
+        </div>*@
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Logs')"><img src="~/Content/DConfigOS/Explorer/settings/tools6.png" />Logs</a>
+            </div>
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Showcase')"><img src="~/Content/DConfigOS/Explorer/settings/website8.png" />Showcase Settings</a>
+            </div>
+            <div class="settings">
+                <a data-ng-click="openSettingsPanel('Store')"><img src="~/Content/DConfigOS/Explorer/settings/website8.png" />Store Settings</a>
+            </div>
+        </div>
+        <div>
+            <script type="text/ng-template" id="General.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">General Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="domain" data-ng-model="settings.Domain" />
+                            <label for="domain">Domain</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="notFoundPath" data-ng-model="settings.NotFoundPath" />
+                            <label for="notFoundPath">Page Not Found Url</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="errorPath" data-ng-model="settings.ErrorPath" />
+                            <label for="errorPath">Erorr Page Url</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="resetPasswordPath" data-ng-model="settings.ResetPasswordPath" />
+                            <label for="errorPath">Reset Password Page</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="customLoginUrl" data-ng-model="settings.CustomLoginUrl" />
+                            <label for="customLoginUrl">Custom Login Url</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Makes DConfig Login page first to appear when domain requested</label>
+                            <div class="form-group">
+                                <div class="radio-inline radio-styled">
+                                    <label>
+                                        <input type="radio" name="dConfigIsStartPage" data-ng-model="settings.DConfigIsStartPage" data-ng-value="true" />
+                                        <span> Enable</span>
+                                    </label>
+                                </div>
+                                <div class="radio-inline radio-styled">
+                                    <label>
+                                        <input type="radio" name="dConfigIsStartPage" data-ng-model="settings.DConfigIsStartPage" data-ng-value="false" />
+                                        <span> Disable</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">When Users Log Out</label>
+                            <div class="form-group">
+                                <div class="radio-inline radio-styled">
+                                    <label>
+                                        <input type="radio" name="logoutMode" data-ng-model="settings.LogoutAction" value="LoginPage" />
+                                        <span> Redirect to DConfig Login page</span>
+
+                                    </label>
+                                </div>
+                                <div class="radio-inline radio-styled">
+                                    <label>
+                                        <input type="radio" name="logoutMode" data-ng-model="settings.LogoutAction" value="DomainRoot" />
+                                        <span> Redirect to Domain root page</span>
+
+                                    </label>
+                                </div>
+                                <div class="radio-inline radio-styled">
+                                    <label>
+                                        <input type="radio" name="logoutMode" data-ng-model="settings.LogoutAction" value="CustomRedirect" />
+                                        <span> Redirect to:</span>
+                                    </label>
+                                </div>
+                                <input class="form-control" type="text" name="redirectTo" data-ng-model="settings.LogoutRedirect" placeholder="Redirect Url" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Identity.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Identity Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Appearance.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Appearance Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Email.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Email Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="smtpHost" data-ng-model="settings.Host" />
+                            <label for="smtpHost">SMTP Host</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="smtpPort" data-ng-model="settings.Port" />
+                            <label for="smtpPort">SMTP Port</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox checkbox-styled">
+                                <label>
+                                    <input name="ssl" type="checkbox" data-ng-model="settings.SSL" value="" />
+                                    <span>Enable SSL</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="userName" data-ng-model="settings.UserName" />
+                            <label for="userName">User Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="password" data-ng-model="settings.Password" />
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="from" data-ng-model="settings.From" />
+                            <label for="from">From Email</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="SMS.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">SMS Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="Twilio_AccountSid" data-ng-model="settings.Twilio_AccountSid" />
+                            <label for="Twilio_AccountSid">Twilio Account Sid</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="Twilio_AuthToken" data-ng-model="settings.Twilio_AuthToken" />
+                            <label for="Twilio_AuthToken">Twilio Auth Token</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="Twilio_From" data-ng-model="settings.Twilio_From" />
+                            <label for="Twilio_From">Twilio From</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="ASPSMS_AccountSid" data-ng-model="settings.ASPSMS_AccountSid" />
+                            <label for="ASPSMS_AccountSid">ASPSMS AccountSid</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="ASPSMS_AuthToken" data-ng-model="settings.ASPSMS_AuthToken" />
+                            <label for="ASPSMS_AuthToken">ASPSMS AutToken</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="ASPSMS_From" data-ng-model="settings.ASPSMS_From" />
+                            <label for="ASPSMS_From">ASPSMS From</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Backup.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Backup System</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Database.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Database Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="DateTime.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Date & Time Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Languages.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Languages Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <select name="language" class="form-control" data-ng-model="settings.PublicDefaultLanguage" ng-options="lang.Value as lang.Name for lang in settings.Languages"></select>
+                            <label for="language">Public Website Default Language</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Security.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Security Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <div class="checkbox checkbox-styled">
+                                <label>
+                                    <input name="emailRegConfirmation" type="checkbox" data-ng-model="settings.EmailRegConfirmation" value="" />
+                                    <span>Email confirmation enabled for new registration</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox checkbox-styled">
+                                <label>
+                                    <input name="smsRegConfirmation" type="checkbox" data-ng-model="settings.SMSRegConfirmation" value="" />
+                                    <span>Phone number confirmation enabled for new registration</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="microsoftClientId" data-ng-model="settings.MicrosoftClientId" />
+                            <label for="microsoftClientId">Microsoft Client Id</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="microsoftClientSecret" data-ng-model="settings.MicrosoftClientSecret" />
+                            <label for="microsoftClientSecret">Microsoft Client Secret</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="twitterClientId" data-ng-model="settings.TwitterClientId" />
+                            <label for="twitterClientId">Twitter Client Id</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="twitterClientSecret" data-ng-model="settings.TwitterClientSecret" />
+                            <label for="twitterClientSecret">Twitter Client Secret</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="facebookClientId" data-ng-model="settings.FacebookClientId" />
+                            <label for="facebookClientId">Facebook Client Id</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="facebookClientSecret" data-ng-model="settings.FacebookClientSecret" />
+                            <label for="facebookClientSecret">Facebook Client Secret</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="googleClientId" data-ng-model="settings.GoogleClientId" />
+                            <label for="facebookClientId">Google Client Id</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="googleClientSecret" data-ng-model="settings.GoogleClientSecret" />
+                            <label for="facebookClientSecret">Goolge Client Secret</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Logs.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Logs</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <select class="form-control" type="text" name="logFiles" data-ng-model="settings.logFile" data-ng-options="o for o in settings.Logs" ng-change="ViewLogFile(settings.logFile)"></select>
+                            <label for="logFiles">Log Files</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea style="font-family: Consolas, monospace;  white-space: pre;" class="form-control" cols="40" rows="16" name="LogsText" data-ng-model="settings.ViewedLogFile" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="cancel()" value="OK">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Notifications.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Notifications Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="SystemInfo.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">System Info</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="SystemUpdate.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">System Update</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Support.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Support</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate></form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Showcase.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Showcase Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <textarea style="font-family: Consolas, monospace;  white-space: pre;" class="form-control" cols="40" rows="16" name="Value" data-ng-model="settings.Value" />
+                            <label for="logFiles">JSON Settings</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+            <script type="text/ng-template" id="Store.html">
+                <div class="modal-header">
+                    <h3 class="modal-title">Store Settings</h3>
+                </div>
+                <div class="modal-body" data-ng-init="initialize()">
+                    <form name="settingsForm.form" class="form" novalidate>
+                        <div class="form-group">
+                            <textarea style="font-family: Consolas, monospace;  white-space: pre;" class="form-control" cols="40" rows="16" name="Value" data-ng-model="settings.Value" />
+                            <label for="logFiles">JSON Settings</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                    <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+                </div>
+            </script>
+        </div>
+    </div>
+</div>

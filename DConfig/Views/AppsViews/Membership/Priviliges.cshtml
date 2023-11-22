@@ -1,0 +1,107 @@
+@{
+    Layout = "~/Views/AppsViews/Membership/_MembershipLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="privilegesSearchBox" id="privilegesSearchBox" />
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.Roles }" data-ng-click="displayRoles()">Roles</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.PrivilegeDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="privilegesTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.PrivilegeDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Privilege Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input type="checkbox" data-ng-model="currentPrv.NeedAuthentication" value="" />
+                                        <span>The user should be logged in</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input type="checkbox" data-ng-model="currentPrv.NeedAuthorization" value="" data-ng-disabled="currentPrv.NeedAuthentication==undefined || !currentPrv.NeedAuthentication" />
+                                        <span>The user should be in one of the privilege roles</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input type="checkbox" data-ng-model="currentPrv.RequireHttps" value="" />
+                                        <span>The user should be using secured connection over https</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="updatePrivilege()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="rolesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Roles">
+            <div class="modal-header">
+                <h3 class="modal-title">Privilege Roles</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <ul class="list-group">
+                        <li class="list-group-item" data-ng-repeat="role in currentPrv.Roles">{{role.Name}} <i class="fa fa-times extMenuChoice" data-ng-click="removePrivilegeFromRole($index)"></i></li>
+                    </ul>
+                    <input type="button" value="Add Role" class="btn btn-primary" data-ng-click="addPrivilegeToRole()" data-ng-disabled="currentPrv.NeedAuthentication==undefined" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Privileges</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="ItemsSelector.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Adding Privilege to Role</h3>
+            </div>
+            <div class="modal-body">
+                <form name="itemsSelector.form" class="form" novalidate>
+                    <div class="form-group">
+                        <select class="form-control" data-ng-model="container.obj" name="item" ng-options="v as v.Name for v in items"></select>
+                        <label for="item">Please choose the resource you want to add:</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

@@ -1,0 +1,9 @@
+﻿<div class="pagination">
+    <span data-ng-show="numberOfPages > 1 && currentPage>1"><a data-ng-click="previousPage()"><</a></span>
+    <span data-ng-show="numberOfPages > 1 && currentPage<=1"><</span>
+    <span data-ng-repeat="n in [] | range:currentPage:9:1:numberOfPages" data-ng-class="{active : (n)==currentPage}" data-ng-show="currentPage != undefined">
+       <a data-ng-click="pageClick(n)">{{n}}</a>
+    </span> 
+    <span data-ng-show="numberOfPages > 1 && currentPage < numberOfPages"><a data-ng-click="nextPage()">></a></span>
+    <span data-ng-show="numberOfPages > 1 && currentPage >= numberOfPages">></span>
+</div>

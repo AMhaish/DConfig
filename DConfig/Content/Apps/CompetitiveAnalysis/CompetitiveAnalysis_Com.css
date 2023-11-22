@@ -1,0 +1,61 @@
+﻿.productDetailsBox{
+    float:left;width:200px;padding:10px;height:auto;border:1px solid #ccc;
+    min-height:200px;
+}
+.productDetailsBox h3{
+    margin:0 0 6px;
+}
+.productDetailsBox .property{
+    font-size: 14px;
+}
+  .table-striped {
+                            margin-top: 20px;
+							width:100%;
+							font-size: 24px;
+							color: #424242;
+							font-family: "GothamBook",GothamBook,Arial,sans-serif;
+                        }
+
+                            .table-striped tr:nth-child(2n+1) .propCol {
+                                width: 15%;
+                            }
+
+                            .table-striped tr:nth-child(2n) .propCol {
+                                width: 15%;
+                            }
+
+                            .table-striped tr .groupCol {
+                                width: 5%;
+                                vertical-align: middle;
+                                border-left: 1px solid #ccc;
+                            }
+
+
+
+                        .groupCol h3 {
+                            -webkit-transform: rotate(-90deg);
+                            -moz-transform: rotate(-90deg);
+                            -ms-transform: rotate(-90deg);
+                            -o-transform: rotate(-90deg);
+                            transform: rotate(-90deg);
+                            display: block;
+                            margin: 30px 0;
+                            transform-origin: center center;
+                            text-align: center;
+                        }
+
+
+                        .table-striped td {
+                            border-right: 1px solid #ccc;
+                            padding:25px;
+                        }
+
+
+                        .table-striped th {
+                            border-right: 1px solid #ccc;
+                        }
+
+                        .table-striped {
+                            border-top: 1px solid #ccc;
+                            border-bottom: 1px solid #ccc;
+                        }

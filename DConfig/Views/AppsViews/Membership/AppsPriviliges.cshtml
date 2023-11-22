@@ -1,0 +1,53 @@
+@{
+    Layout = "~/Views/AppsViews/Membership/_MembershipLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.Name" />
+}
+@section DetailsTopMenu{
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && state == DetailsPanelStates.Priviliges }" data-ng-repeat="app in apps | filter:searchText">
+            <a data-ng-click="displayDetails($index)">{{app.Name}}</a>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Apps Privileges</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+            </div>
+        </div>
+        <div id="childrenForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Priviliges">
+            <div class="modal-header">
+                <h3 class="modal-title">Roles that can access selected App</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-styled" data-ng-repeat="role in currentApp.roles">
+                                        <label>
+                                            <input type="checkbox" data-ng-model="role.Selected" />
+                                            <span>{{role.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="savePrivileges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,69 @@
+﻿@using CompetitiveAnalysis.Models
+@Styles.Render("~/Content/libs")
+<link href="~/Content/Apps/CompetitiveAnalysis/CompetitiveAnalysis_Com.css" rel="stylesheet" />
+<table class="table table-bordered no-margin table-striped">
+    <thead>
+        <tr class="info">
+            <th class="groupCol"></th>
+            <th class="propCol"></th>
+            @foreach (Product p in Model.comparison.Products)
+            {
+                <th>@p.Name</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PropertiesGroup g in Model.groups)
+        {
+            bool groupLabelRendered = false;
+            foreach (Property p in g.Properties)
+            {
+                <tr>
+                    @if (!groupLabelRendered)
+                    {
+                        groupLabelRendered = true;
+                        <td rowspan="@g.Properties.Count" class="groupCol"><h3>@g.DisplayAs</h3></td>
+                    }
+                    <td class="propCol">@p.DisplayAs</td>
+                    @foreach (Product pr in Model.comparison.Products)
+                    {
+                        <td>
+                            @if (Model.values.ContainsKey(pr.Id) && Model.values[pr.Id].ContainsKey(p.Id))
+                            {
+                                switch (p.Type)
+                                {
+                                    case "Image":
+                                    case "Multiple Images":
+                                        <img src="@Model.values[pr.Id][p.Id]" style="max-width:200px;max-height:200px;" />
+                                        break;
+                                    case "Boolean":
+                                        if (Model.values[pr.Id][p.Id] == "true")
+                                        {
+                                            <span>Yes</span>
+                                        }
+                                        else if (Model.values[pr.Id][p.Id] == "false")
+                                        {
+                                            <span>No</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Not Set</span>
+                                        }
+                                        break;
+                                    default:
+                                        <span>@Model.values[pr.Id][p.Id] @p.Unit</span>
+                                        break;
+                                }
+
+                            }
+                            else
+                            {
+                                <span>Not Set</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@section AppMenu{
+    
+        @*<li data-ng-class="{ active: _CurrentPath == '/Gallery' }"><a href="#!/Gallery"><i class="fa fa-file-image-o fa-2x"></i>Gallery</a></li>*@
+
+<li><a href="#!/Gallery"><span class="title">Gallery</span></a></li>
+    
+}
+@section AppContent{
+    <div class="subMenuContainer">
+        <div class="searchListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+    </div>
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+@RenderBody()

@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-ng-app="DConfig">
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <!-- == Favicons == -->
+    <link rel="shortcut icon" href="/Content/DConfigOS/favicon.ico">
+    <link rel="apple-touch-icon" href="/Content/DConfigOS/apple/apple_touch_icon_57.png"><!-- Apple Touch Icon 57x57 -->
+    <link rel="apple-touch-icon" sizes="72x72" href="/Content/DConfigOS/apple/apple_touch_icon_72.png"><!-- Apple Touch Icon 72x72 -->
+    <link rel="apple-touch-icon" sizes="114x114" href="/Content/DConfigOS/apple/apple_touch_icon_114.png"><!-- Apple Touch Icon 114x114 -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dConfig</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css' />
+    @Styles.Render("~/Content/styleslibs")
+    @Styles.Render("~/Content/dconfig")
+    @RenderSection("Styles", required: false)
+    
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/Scripts/libs/utils/html5shiv.js"></script>
+    <script type="text/javascript" src="/Scripts/libs/utils/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body data-ng-controller="RootController" class="menubar-hoverable header-fixed">
+    @RenderBody()
+    <div id="loading">
+        <span>
+        </span>
+    </div>
+    <div id="progress">
+        <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{_progressValue}}" aria-valuemin="0" aria-valuemax="100" style="width: {{_progressValue}}%">
+                <span class="sr-only">{{_progressValue}}% Complete (success)</span>
+            </div>
+        </div>
+    </div>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @Scripts.Render("~/bundles/libs")
+    @Scripts.Render("~/bundles/system")
+    @Scripts.Render("~/bundles/angularJS")
+    @RenderSection("Scripts", required: false)
+    @Scripts.Render("~/bundles/dconfig_shared")
+    <script type="text/ng-template" id="DeleteConfirmation.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirmation message</h3>
+        </div>
+        <div class="modal-body">
+            <div class="textField">{{Message}}</div>
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+            <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+        </div>
+    </script>
+    <script type="text/ng-template" id="Message.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{Header}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="textField">{{Message}}</div>
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+        </div>
+    </script>
+    <script type="text/ng-template" id="IntentExecutorSelector.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Choosing handler</h3>
+        </div>
+        <div class="modal-body">
+            <div class="textField">Please choose the application you want to handle your action.</div>
+            <div class="valueFiled">
+                <select data-ng-model="container.extentionId" ng-options="v.Id as v.Name for v in items"></select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+            <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+        </div>
+    </script>
+    <script type="text/ng-template" id="ImageDisplayer.html">
+        <div class="modal-body" style="text-align:center;">
+            <img src="{{Value}}" style="max-height:800px;max-width:1024px;"/>
+        </div>
+        <div class="modal-footer">
+            <input type="button" class="btn btn-default" ng-click="close()" value="Close">
+        </div>
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+﻿/* login
+----------------------------------------------------------*/
+.container {
+    display: block;
+    font-size: .85em;
+    margin: 100px auto 0;
+    background: #fff;
+    width: 640px;
+    height: 480px;
+    padding: 20px;
+    box-shadow:0px 0px 5px 0px #808080;
+}
+
+.login {
+    margin: 0 auto;
+    width: 330px;
+    position:relative;
+    left:-50px;
+    opacity:0;
+}
+.login .logo{
+    text-align:center;
+    padding-bottom:10px;
+}
+.login input[type="text"],.login input[type="password"]{
+    width:330px;
+}
+.login .submitButton{
+    text-align:right;
+}
+.login  a {
+    background-color: #d3dce0;
+    margin-left: 10px;
+    margin-right: 3px;
+    text-decoration: none;
+}
+
+    .login  a.email {
+        background: none;
+        margin: 0;
+        padding: 0;
+        text-decoration: underline;
+    }
+
+.login ul {
+    margin: 10px;
+    padding:0;
+    text-align:center;
+}
+
+.login li {
+    display: inline;
+    list-style: none;
+}
+.login li a{
+    margin:0 3px;
+    width:32px;
+    height:32px;
+    display:inline-block;
+    cursor:pointer;
+}
+    .login li a.googleExternalLink {
+        background-image:url(/Content/DConfigOS/images/icons/google.png);
+    }
+    .login li a.microsoftExternalLink {
+        background-image:url(/Content/DConfigOS/images/icons/microsoft.png);
+    }
+    .login li a.facebookExternalLink {
+        background-image:url(/Content/DConfigOS/images/icons/facebook.png);
+    }
+    .login li a.twitterExternalLink {
+        background-image:url(/Content/DConfigOS/images/icons/twitter.png);
+    }
+
+.register{
+    margin: 0 auto;
+    width: 330px;
+    position:relative;
+    left:-50px;
+    opacity:0;
+}
+.register input[type="text"],.register input[type="password"]{
+    width:330px;
+}
+.register .submitButton{
+    text-align:right;
+}

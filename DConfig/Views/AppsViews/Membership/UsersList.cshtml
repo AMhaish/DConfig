@@ -1,0 +1,389 @@
+@{
+    Layout = "~/Views/AppsViews/Membership/_MembershipLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.UserName" />
+    <a data-ng-click="displayCreateForm()"><i class="fa fa-plus"></i> Add User</a>
+}
+@section DetailsTopMenu{
+
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.Info || state == DetailsPanelStates.Edit || state == DetailsPanelStates.Roles || state == DetailsPanelStates.ResetPassword)}" data-ng-repeat="user in users | filter:searchText">
+            <a data-ng-click="displayDetails($index)">{{user.UserName}}</a>
+            <i class="fa fa-times extMenuChoice" data-ng-click="deleteUser($index)"></i>
+            <i class="fa extMenuChoice" data-ng-click="toggleUserActivation($index)" data-ng-class="{'fa-ban':user.IsEnabled==true,'fa-check':user.IsEnabled==false}"></i>
+            <i class="fa fa-users extMenuChoice" data-ng-click="displayRolesForm($index)"></i>
+            <i class="fa fa-lock extMenuChoice" data-ng-click="displayResetPasswordForm($index)"></i>
+            <i class="fa fa-pencil extMenuChoice" data-ng-click="displayEditForm($index)"></i>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Users</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="displayCreateForm()">Create New User</a>
+            </div>
+        </div>
+        <div id="infoForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Info">
+            <div class="modal-header">
+                <h3 class="modal-title">User Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" name="userName" type="text" data-ng-model="currentUser.UserName" value="" readonly="readonly" />
+                                <label for="userName">User Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="email" type="text" data-ng-model="currentUser.Email" value="" readonly="readonly" />
+                                <label for="email">Email</label>
+                            </div>
+                            <hr />
+                            <div class="form-group" data-ng-repeat="prop in definedUserProporties">
+                                <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="definedUserProporties[$index].Value" value="" readonly="readonly" />
+                                <label for="{{prop.Name}}">{{prop.Name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="createForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Create">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New User</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" name="userName" type="text" data-ng-model="currentUser.UserName" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error"
+                                      ng-show="createForm.username.$dirty && createForm.username.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.username.$error.required">
+                                        User name is required
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.username.$error.minlength">
+                                        User name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.username.$error.maxlength">
+                                        User name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="userName">User Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="email" type="text" data-ng-model="currentUser.Email" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="createForm.email.$dirty && createForm.email.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.email.$error.required">
+                                        User email is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.email.$error.minlength">
+                                        User email is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.email.$error.email">
+                                        User is not a valid email. Please input a valid email.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.email.$error.maxlength">
+                                        User email cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" data-ng-model="currentUser.Password" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="createForm.password.$dirty && createForm.password.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.password.$error.required">
+                                        User password is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.password.$error.minlength">
+                                        User password is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.password.$error.maxlength">
+                                        User password cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="confirmpassword" data-ng-model="currentUser.ConfirmPassword" value="" required data-password-match="currentUser.Password" />
+                                <span class="error-container"
+                                      ng-show="createForm.confirmpassword.$dirty && createForm.confirmpassword.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.confirmpassword.$error.required">
+                                        User password is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.confirmpassword.$error.match">
+                                        Password should match the confirm password
+                                    </small>
+                                </span>
+                                <label for="confirmpassword">Confirm Password</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Create" class="btn btn-primary" data-ng-click="createUser()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="editForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Edit">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit User</h3>
+            </div>
+            <div class="modal-body">
+                <form name="editForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" name="userName" type="text" data-ng-model="currentUser.UserName" value="" required data-ng-minlength="3" data-ng-maxlength="50" readonly="readonly" />
+                                <span class="error"
+                                      ng-show="editForm.username.$dirty && editForm.username.$invalid">
+                                    <small class="error"
+                                           ng-show="editForm.username.$error.required">
+                                        User name is required
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.username.$error.minlength">
+                                        User name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.username.$error.maxlength">
+                                        User name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="userName">User Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="email" type="text" data-ng-model="currentUser.Email" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="editForm.email.$dirty && editForm.email.$invalid">
+                                    <small class="error"
+                                           ng-show="editForm.email.$error.required">
+                                        User email is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.email.$error.minlength">
+                                        User email is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.email.$error.email">
+                                        User is not a valid email. Please input a valid email.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="editForm.email.$error.maxlength">
+                                        User email cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="email">Email</label>
+                            </div>
+                            <hr />
+                            <div data-ng-repeat="prop in definedUserProporties">
+                                <div data-ng-switch data-on="prop.Type">
+                                    <div class="form-group" data-ng-switch-when="String">
+                                        <input name="{{prop.Name}}" class="form-control" type="text" data-ng-model="prop.Value" value="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="String - Multiple Lines">
+                                        <textarea name="{{prop.Name}}" class="form-control" data-ng-model="prop.Value" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Date">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" date-picker="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List">
+                                        <select class="form-control" name="{{prop.Name}}" data-ng-model="prop.Value" ng-options="vt.Value as vt.Value for vt in prop.Enum.Values"></select>
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Checkboxes">
+                                        <label class="control-label">{{prop.Name}}</label>
+                                        <div class="form-group">
+                                            <div class="checkbox-inline checkbox-styled" data-ng-repeat="v in prop.Enum.Values">
+                                                <label>
+                                                    <input type="checkbox" checklist-csv-model="prop.Value" checklist-value="v.Value" />
+                                                    <span>{{v.Value}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Radio Buttons">
+                                        <label class="control-label">{{prop.Name}}</label>
+                                        <div class="form-group">
+                                            <div class="radio-inline radio-styled" data-ng-repeat="v in prop.Enum.Values">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" data-ng-value="v.Value" />
+                                                    <span>{{v.Value}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Filter/Select">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" data-typeahead="v.Value for v in prop.Enum.Values | filter:$viewValue | limitTo:8">
+                                        <label for="{{prop.Name}}">{{prop.Name}} (The value will be appedned to the list if it wasn't found in it)</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Content Url">
+                                        <div class="input-group">
+                                            <div class="input-group-content">
+                                                <input class="form-control" name="{{prop.Name}}" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" readonly="readonly" />
+                                                <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runContentSelector($index)" />
+                                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Boolean">
+                                        <label class="col-sm-2 control-label">{{prop.Name}}</label>
+                                        <div class="col-sm-10">
+                                            <div class="radio-inline radio-styled">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" value="True" />
+                                                    <span>True</span>
+                                                </label>
+                                            </div>
+                                            <div class="radio-inline radio-styled">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" value="False" />
+                                                    <span>False</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Number">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-default>
+                                        <div class="input-group">
+                                            <div class="input-group-content">
+                                                <input class="form-control" name="{{prop.Name}}" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" readonly="readonly" />
+                                                <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelector($index)" />
+                                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="editUser()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="resetPasswordForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ResetPassword">
+            <div class="modal-header">
+                <h3 class="modal-title">Reset User Password</h3>
+            </div>
+            <div class="modal-body">
+                <form name="resetPasswordForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" data-ng-model="currentUser.Password" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="resetPasswordForm.password.$dirty && resetPasswordForm.password.$invalid">
+                                    <small class="error"
+                                           ng-show="resetPasswordForm.password.$error.required">
+                                        User password is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="resetPasswordForm.password.$error.minlength">
+                                        User password is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.password.$error.maxlength">
+                                        User password cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="confirmpassword" data-ng-model="currentUser.ConfirmPassword" value="" required data-password-match="currentUser.Password" />
+                                <span class="error-container"
+                                      ng-show="resetPasswordForm.confirmpassword.$dirty && resetPasswordForm.confirmpassword.$invalid">
+                                    <small class="error"
+                                           ng-show="resetPasswordForm.confirmpassword.$error.required">
+                                        User password is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="resetPasswordForm.confirmpassword.$error.match">
+                                        Password should match the confirm password
+                                    </small>
+                                </span>
+                                <label for="confirmpassword">Confirm Password</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="resetPassword()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="rolesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Roles">
+            <div class="modal-header">
+                <h3 class="modal-title">User Roles</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="role in currentUser.RolesNames">{{role}} <i class="fa fa-times extMenuChoice" data-ng-click="removeUserFromRole($index)"></i></li>
+                </ul>
+                <input type="button" value="Add" class="btn btn-primary" data-ng-click="addUserToRole()" />
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="ItemsSelector.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Adding User to Role</h3>
+            </div>
+            <div class="modal-body">
+                <form name="resetPasswordForm" class="form" novalidate>
+                    <select class="form-control" name="choose" data-ng-model="container.obj" ng-options="v as v.Name for v in items"></select>
+                    <label for="choose">Please choose the role you want to add the user to.</label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

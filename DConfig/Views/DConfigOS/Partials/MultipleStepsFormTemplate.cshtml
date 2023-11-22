@@ -1,0 +1,49 @@
+﻿@model DConfigOS_Core.Providers.HttpContextProviders.DConfigFormModel
+<div class="singleFormContainer">
+    @using (Html.BeginForm("SubmitForm", "FormsAPI", new { controller = "FormsAPI", Id = Model.PageForm.Id, PageUrl = Model.PageUrl }, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        <table>
+            @foreach (FormsField f in Model.PageForm.FormFields)
+            {
+                <tr>
+                    <td class="fieldsText">@f.Name</td>
+                    <td>
+                        @switch (f.Type)
+                        {
+                            case "Boolean":
+                                <input name="_@(f.Name)" type="text" class="form-control" />
+                                break;
+                            case "String":
+                            case "Number":
+                            <input name="_@(f.Name)" type="text" class="form-control" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")" />
+                                break;
+                            case "String - Multiple Lines":
+                            <textarea name="_@(f.Name)" class="form-control" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")"></textarea>
+                                break;
+                            case "Predefined List":
+                            <select name="_@(f.Name)" class="form-control">
+                                <option value=""></option>
+                                @if (f.Enum != null)
+                                {
+                                    foreach (var val in f.Enum.Values)
+                                    {
+                                        <option value="@val.Value">@val.Value</option>
+                                    }
+                                }
+                            </select>
+                                break;
+
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

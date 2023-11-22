@@ -1,0 +1,94 @@
+﻿@model DConfigOS_Core.Providers.HttpContextProviders.DConfigFormModel
+
+<form method="post" class="form-horizontal" enctype="multipart/form-data"
+      action="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ?
+          "/DConfig/FormsAPI/SubmitForm/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&": "") + "PageUrl=" + Model.PageUrl
+          :
+          (Model.PageForm.CustomSubmitPath.Contains('?') ?
+            Model.PageForm.CustomSubmitPath.Substring(0, Model.PageForm.CustomSubmitPath.IndexOf('?')) + "/" + Model.PageForm.Id + Model.PageForm.CustomSubmitPath.Substring(Model.PageForm.CustomSubmitPath.IndexOf('?'), Model.PageForm.CustomSubmitPath.Length - Model.PageForm.CustomSubmitPath.IndexOf('?')) + "&" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl
+            :
+            Model.PageForm.CustomSubmitPath + "/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl))">
+
+    <div class="singleFormContainer">
+        
+        @if (!Model.IsValid)
+        {
+            @Html.ValidationSummary(true)
+        }
+        <div>
+            @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", Model)
+            @*<tr>
+                    <td></td>
+                    <td style="text-align:right;">
+                        <input type="submit" value="Submit" class="btn btn-default" />
+                    </td>
+                </tr>*@
+            <div class="row" id="sectionsFormContainer">
+
+                <ul class="nav nav-tabs" role="tablist" id="_tabMenu">
+                    @if (Model.PageForm.ChildrenForms != null)
+                    {
+                        bool firstTabActive = true;
+                        foreach (DConfigOS_Core.Layer2.Helpers.DConfigFormModel m in Model.ChildrenModels)
+                        {
+                            <li id="@(m.PageForm.Name.Replace(" ", ""))Link" class="@(firstTabActive ? "active" : "")"><a href="#@(m.PageForm.Name.Replace(" ",""))Panel" role="tab" data-toggle="tab">@(m.PageForm.Name)</a></li>
+                            firstTabActive = false;
+                        }
+                    }
+                </ul>
+                <div class="tab-content">
+                    @if (Model.PageForm.ChildrenForms != null && Model.PageForm.ChildrenForms.Count > 1)
+                    {
+                        bool firstPanelActive = true;
+                        int currentPanelIndex = 0;
+                        foreach (DConfigOS_Core.Layer2.Helpers.DConfigFormModel m in Model.ChildrenModels)
+                        {
+                            <div class="tab-pane @(firstPanelActive ? "active" : "")" id="@(m.PageForm.Name.Replace(" ", ""))Panel">
+                                <div>
+                                    @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", m)
+
+                                    <div class="row">
+                                        <div class="col-sm-6 fieldsText"></div>
+                                        <div class="col-sm-6">
+                                            @if (!firstPanelActive)
+                                            {
+                                                <input type="button" value="@(String.IsNullOrEmpty(Model.PageForm.BackButtonText) ? "Back" : Model.PageForm.BackButtonText)" class="btn btn-default navBtns" data-target="#@(Model.ChildrenModels[currentPanelIndex-1].PageForm.Name.Replace(" ",""))Panel" data-link="#@(Model.ChildrenModels[currentPanelIndex-1].PageForm.Name.Replace(" ",""))Link" />
+                                            }
+                                            @if (currentPanelIndex < Model.ChildrenModels.Count - 1)
+                                            {
+                                                <input type="button" value="@(String.IsNullOrEmpty(Model.PageForm.NextButtonText) ? "Next" : Model.PageForm.NextButtonText)" class="btn btn-primary navBtns" data-target="#@(Model.ChildrenModels[currentPanelIndex+1].PageForm.Name.Replace(" ",""))Panel" data-link="#@(Model.ChildrenModels[currentPanelIndex+1].PageForm.Name.Replace(" ",""))Link" />
+                                            }
+                                            else
+                                            {
+
+                                                <input type="submit" value="@(String.IsNullOrEmpty(Model.PageForm.SubmitButtonText) ? "Submit" : Model.PageForm.SubmitButtonText)" class="btn btn-primary" />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            firstPanelActive = false;
+                            currentPanelIndex++;
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<script type="text/javascript">
+    $('#_tabMenu a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+    $('.tab-content .navBtns').click(function (e) {
+        var target = $(this).attr('data-link');
+        $('#_tabMenu').find('li').removeClass('active');
+        $(target).addClass('active');
+        $(this).tab('show');
+    });
+</script>

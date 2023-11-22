@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "~/Views/DConfigOS/_Layout.cshtml";
+}
+@section Scripts{
+    @Scripts.Render("~/bundles/dconfig_account")
+    @Scripts.Render("~/bundles/dconfig_account_controllers")
+}
+@section Styles{
+    @*@Styles.Render("~/Content/dconfig_account")*@
+}
+<div data-ng-view="">
+</div>

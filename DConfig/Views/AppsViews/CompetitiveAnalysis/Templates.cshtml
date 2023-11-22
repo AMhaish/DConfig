@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/AppsViews/CompetitiveAnalysis/__SearchListLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="formsSearchBox" id="formsSearchBox" />
+    <a data-ng-click="createRootNode()"><i class="fa fa-plus"></i> Add Product Type</a>
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.Properties }" data-ng-click="displayProperties()">Properties</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.GroupDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="templatesTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.GroupDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Product Type Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="2" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.minlength">
+                                        Name is required to be at least 2 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="fieldsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Properties">
+            <div class="modal-header">
+                <h3 class="modal-title">Properties</h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="PricesAcc">
+                    <div class="card panel" data-ng-repeat="p in currentObj.PropertiesGroups">
+                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#PricesAcc" data-target="#Price{{$index}}">
+                            <header> {{p.Name}} </header>
+                            <div class="tools">
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-angle-down"></i>
+                                </a>
+                                <a class="btn btn-icon-toggle">
+                                    <i class="pull-right glyphicon fa fa-times" data-ng-click="removePropertiesGroup($index)"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="Price{{$index}}" class="collapse">
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item" data-ng-repeat="pp in p.Properties">
+                                        <h4>
+                                            {{pp.Name}}
+                                            <i style="color: #9c27b0;margin-left:30px;cursor:pointer;font-size:22px;" data-ng-class="{'md-star':pp.IsHighlight,'md-star-outline':!pp.IsHighlight}" data-ng-click="changeHeightLightState(pp)"></i>
+                                            <label class="control-label" style="margin-left:40px;">Invisible to:</label>
+                                            <label data-ng-repeat="v in BrandFactoryTypes" style="margin-left:10px;">
+                                                <input type="checkbox" checklist-csv-model="pp.InvisibileToFactoryTypes" checklist-value="v.Value" />
+                                                <span>{{v.Name}}</span>
+                                            </label>
+                                            <i class="fa fa-times extMenuChoice" data-ng-click="removeProperty(p.Id,pp.Id)"></i>
+                                        </h4>
+                                        @*<div class="checkbox checkbox-styled">
+                                                <label>
+                                                    <input type="checkbox" data-ng-model="pp.IsHighlight" />
+                                                    <span>Highlight this property</span>
+                                                </label>
+                                            </div>*@
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end .panel -->
+                </div><!--end .panel-group -->
+                <br />
+                <input type="button" value="Add Properties Group" class="btn btn-success" data-ng-click="addNewProperty()" />
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveProperties()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Products Types</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createRootNode()">Create New Product Type</a>
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Product Type</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newNode.Name" value="" placeholder="Name" required data-ng-minlength="2" data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 2 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="ItemsSelector.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Inserting new properties</h3>
+            </div>
+            <div class="modal-body">
+                <div class="textField">Please choose the property group you want to add.</div>
+                <div class="valueFiled">
+                    <select data-ng-model="container.obj" ng-options="v as v.Name for v in items"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

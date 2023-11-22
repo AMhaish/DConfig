@@ -1,0 +1,208 @@
+﻿@using WebsiteManager.Properties
+@{
+    Layout = "~/Views/AppsViews/WebsiteManager/_WebsiteManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.Name" />
+    <a data-ng-click="displayCreateForm()"><i class="fa fa-plus"></i> Add Stage</a>
+}
+
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.NextStages }" data-ng-click="displayNextStages()" data-ng-hide="state == DetailsPanelStates.Create">Next Stages</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.StageRoles }" data-ng-click="displayRolesForm()" data-ng-hide="state == DetailsPanelStates.Create">Stage Roles</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.StageDetails }" data-ng-click="displayDetails()">General</a></li>
+    </ul>
+}
+
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.StageDetails || state == DetailsPanelStates.Edit ||  state == DetailsPanelStates.StageRoles || state == DetailsPanelStates.NextStages)}" data-ng-repeat="stage in stages | filter:searchText">
+            <a data-ng-click="displayDetailsForm($index)">{{stage.Name}}</a>
+            <i class="fa fa-times extMenuChoice" data-ng-click="deleteStage($index)"></i>
+            <i class="fa fa-pencil extMenuChoice" data-ng-click="displayEditForm($index)"></i>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.StageDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Stage Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body" id="detailsParent">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="createForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="nextStagesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.NextStages">
+            <div class="modal-header">
+                <h3 class="modal-title">Next Stages</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="control-label">Next Stages</label>
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-styled" data-ng-repeat="field in currentObj.NextStages">
+                                        <label>
+                                            <input type="checkbox" data-ng-model="field.Selected" />
+                                            <span>{{field.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveStages()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="rolesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.StageRoles">
+            <div class="modal-header">
+                <h3 class="modal-title">Stage Roles</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="role in currentObj.RolesNames">{{role}} <i class="fa fa-times extMenuChoice" data-ng-click="removeStageFromRole($index)"></i></li>
+                </ul>
+                <input type="button" value="Add" class="btn btn-primary" data-ng-click="addStageToRole()" />
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="createForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Create">
+            <div class="modal-header">
+                <h3 class="modal-title">Stage Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body" id="createParent">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="createForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Create" class="btn btn-primary" data-ng-click="createStage()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="editForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Edit">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Stage</h3>
+            </div>
+            <div class="modal-body">
+                <form name="editForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body" id="editParent">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="createForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="createForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="editStage()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Stages</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="displayCreateForm()">Create New Stage</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="ItemsSelector.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Adding Stage to Role</h3>
+            </div>
+            <div class="modal-body">
+                <form name="stageRoleForm" class="form" novalidate>
+                    <select class="form-control" name="choose" data-ng-model="container.obj" ng-options="v as v.Name for v in items"></select>
+                    <label for="choose">Please choose the role you want to add the stage to.</label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

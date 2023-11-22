@@ -1,0 +1,142 @@
+﻿@{
+    Layout = "~/Views/AppsViews/Gallery/_GalleryLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="foldersSearchBox" id="foldersSearchBox" />
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceDetails }" data-ng-click="uploadDirectory()"><i class="fa fa-plus"></i> Upload Directory</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceDetails }" data-ng-click="uploadFile()"><i class="fa fa-plus"></i> Upload Files</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceDetails }" data-ng-click="deleteFile()"><i class="fa fa-times"></i> Remove Selected</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceDetails }" data-ng-click="unselectAll()">Unselect all</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="foldersTree">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <form novalidate class="form">
+            <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+                <div class="modal-header" style="text-align:center;">
+                    <h3 class="modal-title">Gallery</h3>
+                </div>
+                <div class="modal-body" style="text-align:center;">
+                </div>
+            </div>
+            <div id="filesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.FolderDetails">
+                <div data-ng-repeat="file in currentObj.Files" class="file">
+                    <div data-ng-click="ok(file.CDNPath)">
+                        <div data-ng-switch="file.Type" class="fileIcon">
+                            <img src="{{file.Path}}" data-ng-switch-when=".jpg" />
+                            <img src="{{file.Path}}" data-ng-switch-when=".png" />
+                            <img src="{{file.Path}}" data-ng-switch-when=".gif" />
+                            <img src="{{file.Path}}" data-ng-switch-when=".jpeg" />
+                            <img src="{{file.Path}}" data-ng-switch-when="image/jpg" />
+                            <img src="{{file.Path}}" data-ng-switch-when="image/png" />
+                            <img src="{{file.Path}}" data-ng-switch-when="image/gif" />
+                            <img src="{{file.Path}}" data-ng-switch-when="image/jpeg" />
+                            <img src="~/Content/Apps/Gallery/pdf.png" data-ng-switch-when=".pdf" />
+                            <img src="~/Content/Apps/Gallery/file.png" data-ng-switch-default="" />
+                        </div>
+                        <div class="fileName">{{file.Name}}</div>
+                        <div class="filesize">{{(file.Length / 1024).toFixed(2)}} KB</div>
+                    </div>
+                    <div class="fileCommands">
+                        <a class="copy-link" aria-label="{{file.CDNPath}}"><i class="fa fa-link"></i></a>
+                        <div class="checkbox-inline checkbox-styled">
+                            <label>
+                                <input type="checkbox" checklist-model="Selected.SelectedImages" checklist-value="$index">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div>
+        <script type="text/ng-template" id="gallery_createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Folder</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate class="form">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newNode.Name" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="uploadForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload new files</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate class="form">
+                    <input name="Path" type="hidden" value="{{newFile.Path}}" />
+                    <div class="textField">File</div>
+                    @*<div data-uploader="" data-destination-object="newFile" data-property-name="FilePath" data-action="/DConfig/IOServicesAPI/createFile" data-finish-handler="ok()"></div>*@
+
+                    <div ng-file-drop ng-model="newFile.Files" class="drop-box"
+                         drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+                         data-multiple="true" data-allow-dir="true" data-accept="*">
+                        You can drop Images files here to upload them
+                    </div>
+                    <button class="uploadButton" data-ng-file-select data-ng-model="newFile.Files" data-multiple="true" class="btn btn-default">Or click here to browse and upload</button>
+                    <div data-ng-no-file-drop>File Farg/Drop is not supported for this browser</div>
+                    <progressbar animate="true" value="progress" type="success"></progressbar>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="uploadDirectoryForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload new directory</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate class="form">
+                    <input name="Path" type="hidden" value="{{newFile.Path}}" />
+                    <div class="textField">File</div>
+                    @*<div data-uploader="" data-destination-object="newFile" data-property-name="FilePath" data-action="/DConfig/IOServicesAPI/createFile" data-finish-handler="ok()"></div>*@
+   
+                    <div class="picker"><input type="file" id="picker" name="fileList" data-ng-model="newFile.Files" ng-click="chooseDirectoryClick()" webkitdirectory multiple></div>
+                    <ul id="listing">
+                        <li ng-repeat="dir in newFile.Files">{{dir}}</li>
+                    </ul>
+                 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" ng-click="submit()" value="Submit">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+
+    </div>
+}

@@ -1,0 +1,273 @@
+﻿@using CompetitiveAnalysis.Models
+@model IEnumerable<PropertiesGroup>
+@{
+    string style = "";
+    if (ViewContext.RequestContext.HttpContext.Request.QueryString["Style"] != null)
+    {
+        style = ViewContext.RequestContext.HttpContext.Request.QueryString["Style"];
+    }
+}
+@if (style != "Simple" && style!="List")
+{
+    @Styles.Render("~/Content/libs")
+}
+else
+{
+    <link href="~/Content/Apps/CompetitiveAnalysis/bootstrap.css" rel="stylesheet" />
+}
+<link href="~/Content/Apps/CompetitiveAnalysis/CompetitiveAnalysis_PD.css" rel="stylesheet" />
+
+@if (Model != null && Model.Count() > 0)
+{
+    switch (style)
+    {
+        case "Simple":
+            <table class="table table-bordered no-margin table-striped">
+                <tbody>
+                    @foreach (PropertiesGroup g in Model)
+                    {
+                        bool groupLabelRendered = false;
+                        foreach (Property p in g.Properties)
+                        {
+                            <tr>
+                                @if (!groupLabelRendered)
+                                {
+                                    groupLabelRendered = true;
+                                    <td rowspan="@g.Properties.Count" class="groupCol"><h3>@g.DisplayAs</h3></td>
+                                }
+                                <td class="propCol">@(p.DisplayAs)</td>
+                                <td>
+                                    <span>
+                                        @if (p.Type == "Image")
+                                        {
+                                            <img src="@p.Value" style="max-height:200px;max-width:200px;" />
+                                        }
+                                        else if (p.Type == "Boolean")
+                                        {
+                                            if (!String.IsNullOrEmpty(p.Value) && p.Value == "True")
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else if (!String.IsNullOrEmpty(p.Value) && p.Value == "False")
+                                            {
+                                                <span>No</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Not Set</span>
+                                            }
+                                        }
+                                        else if(p.Type == "Rich Text Box" || p.Type=="Simple Rich Text Box")
+										{
+											<span>
+                                                @MvcHtmlString.Create(p.Value)
+                                            </span>
+										}
+										else
+                                        {
+                                            <span>
+                                                @p.Value @p.Unit
+                                            </span>
+                                        }
+                                    </span>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+                    break;
+        case "Accordions":
+                    var counter = -1;
+                    @Scripts.Render("~/bundles/libs")
+                    <div class="panel-group" id="GroupsContainer">
+                        @foreach (PropertiesGroup g in Model)
+                        {
+                            counter++;
+                            <div class="card panel">
+                                <div class="card-head collapsed" data-toggle="collapse" data-parent="#GroupsContainer" data-target="#Group@(counter)">
+                                    <header>@g.DisplayAs</header>
+                                    <div class="tools">
+                                        <a class="btn btn-icon-toggle">
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div id="Group@(counter)" class="collapse">
+                                    <div class="card-body">
+                                        @if (g.Properties != null && g.Properties.Count > 0)
+                                        {
+                                            foreach (Property p in g.Properties)
+                                            {
+                                                <div class="property">
+                                                    <div class="textField">
+                                                        @(p.DisplayAs)@(String.IsNullOrEmpty(p.DisplayAs) ? "" : ":")
+                                                        <span>
+                                                            @if (p.Type == "Image")
+                                                            {
+                                                                <img src="@p.Value" style="max-height:200px;max-width:200px;" />
+                                                            }
+                                                            else if (p.Type == "Boolean")
+                                                            {
+                                                                if (!String.IsNullOrEmpty(p.Value) && p.Value == "true")
+                                                                {
+                                                                    <span>Yes</span>
+                                                                }
+                                                                else if (!String.IsNullOrEmpty(p.Value) && p.Value == "false")
+                                                                {
+                                                                    <span>No</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>Not Set</span>
+                                                                }
+                                                            }
+															else if(p.Type == "Rich Text Box" || p.Type=="Simple Rich Text Box")
+															{
+																<span>
+																	@MvcHtmlString.Create(p.Value)
+																</span>
+															}
+                                                            else
+                                                            {
+                                                                <span>
+                                                                    @p.Value @p.Unit
+                                                                </span>
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                        break;
+        case "Blocks":
+        default:
+                        var counter2 = 0;
+                        foreach (PropertiesGroup g in Model)
+                        {
+                            counter2++;
+                            <div class="col-md-4">
+                                <div class="card card-bordered style-primary">
+                                    <div class="card-head card-bordered style-primary">
+                                        <header>@g.DisplayAs</header>
+                                    </div>
+                                    <div class="card-body style-default-bright">
+                                        @if (g.Properties != null && g.Properties.Count > 0)
+                                        {
+                                            foreach (Property p in g.Properties)
+                                            {
+                                                <div class="property">
+                                                    <div class="textField">
+                                                        @(p.DisplayAs)@(String.IsNullOrEmpty(p.DisplayAs) ? "" : ":")
+                                                        <span>
+                                                            @if (p.Type == "Image")
+                                                            {
+                                                                <img src="@p.Value" style="max-height:200px;max-width:200px;" />
+                                                            }
+                                                            else if (p.Type == "Boolean")
+                                                            {
+                                                                if (!String.IsNullOrEmpty(p.Value) && p.Value == "true")
+                                                                {
+                                                                    <span>Yes</span>
+                                                                }
+                                                                else if (!String.IsNullOrEmpty(p.Value) && p.Value == "false")
+                                                                {
+                                                                    <span>No</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>Not Set</span>
+                                                                }
+                                                            }
+															else if(p.Type == "Rich Text Box" || p.Type=="Simple Rich Text Box")
+															{
+																<span>
+																	@MvcHtmlString.Create(p.Value)
+																</span>
+															}
+                                                            else
+                                                            {
+                                                                <span>
+                                                                    @p.Value @p.Unit
+                                                                </span>
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            if (counter2 % 3 == 0)
+                            {
+                                <div class="clearfix hidden-sm"></div>
+                            }
+                        }
+                        break;
+        case "List":
+                        var counter3 = -1;
+                        <div class="panel-group" id="ListGroupsContainer">
+                            @foreach (PropertiesGroup g in Model)
+                            {
+                                counter3++;
+                                <div class="row @(g.Name)-design">
+                                    <div class="column medium-12">
+                                        <div class="h2">@g.DisplayAs</div>
+										<div class="listItemContent">
+                                            @if (g.Properties != null && g.Properties.Count > 0)
+                                            {
+                                                foreach (Property p in g.Properties)
+                                                {
+                                                    <div class="col-md-3">
+                                                        <div class="h4">@(p.DisplayAs)</div>
+                                                        <p class="description">
+                                                            @if (p.Type == "Image")
+                                                            {
+                                                                <img src="@p.Value" style="max-height:200px;max-width:200px;" />
+                                                            }
+                                                            else if (p.Type == "Boolean")
+                                                            {
+                                                                if (!String.IsNullOrEmpty(p.Value) && p.Value == "true")
+                                                                {
+                                                                    <span>Yes</span>
+                                                                }
+                                                                else if (!String.IsNullOrEmpty(p.Value) && p.Value == "false")
+                                                                {
+                                                                    <span>No</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>Not Set</span>
+                                                                }
+                                                            }
+															else if(p.Type == "Rich Text Box" || p.Type=="Simple Rich Text Box")
+															{
+																<span>
+																	@MvcHtmlString.Create(p.Value)
+																</span>
+															}
+                                                            else
+                                                            {
+                                                                <span>
+                                                                    @p.Value @p.Unit
+                                                                </span>
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                }
+                                            }
+										</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                            break;
+    }
+}

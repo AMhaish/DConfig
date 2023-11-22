@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@section AppMenu{
+
+        @*<li data-ng-class="{ active: _CurrentPath == '/FormsManager' }"><a href="#!/FormsManager"><i class="fa fa-pencil-square-o fa-2x"></i>Forms</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/FormsManager/PredefinedLists' }"><a href="#!/FormsManager/PredefinedLists"><i class="fa fa-list-ul fa-2x"></i>Lists</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/FormsManager/FormsSubmitEvents' }"><a href="#!/FormsManager/FormsSubmitEvents"><i class="fa fa fa-bolt fa-2x"></i>Forms Events</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/FormsManager/PostedForms' }"><a href="#!/FormsManager/PostedForms"><i class="fa fa-upload fa-2x"></i>Posted Forms</a></li>*@
+<li><a href="#!/FormsManager"><span class="title">Posted Forms</span></a></li>
+<li><a href="#!/FormsManager/FormsDefinitions"><span class="title">Forms Definitions</span></a></li>
+<li><a href="#!/FormsManager/FormsSubmitEvents"><span class="title">Forms Events</span></a></li>
+<li><a href="#!/FormsManager/PredefinedLists"><span class="title">Predefined Lists</span></a></li>
+
+
+ 
+}
+@section AppContent{
+    <div class="subMenuContainer">
+        <div class="searchListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+        <div id="subMenuOpenCloseBtnCon"><i id="subMenuOpenCloseBtn" class="fa fa-caret-left"></i></div>
+    </div>
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+@RenderBody()

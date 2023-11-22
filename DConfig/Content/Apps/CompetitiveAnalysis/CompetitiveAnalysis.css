@@ -1,0 +1,14 @@
+﻿.productDetailsBox{
+    float:left;width:200px;padding:10px;height:auto;border:1px solid #ccc;
+    min-height:200px;
+}
+.productDetailsBox h3{
+    margin:0 0 6px;
+}
+.productDetailsBox .property{
+    font-size: 14px;
+}
+
+.radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline{
+    margin-left:0;
+}

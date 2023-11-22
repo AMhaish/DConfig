@@ -1,0 +1,38 @@
+@{
+                /**/
+
+                Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@section AppMenu{
+
+    @*<li data-ng-class="{ active: _CurrentPath == '/Membership' }"><a href="#!/Membership"><i class="fa fa-user fa-2x"></i>Users</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/Membership/Roles' }"><a href="#!/Membership/Roles"><i class="fa fa-users fa-2x"></i>Roles</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/Membership/Priviliges' }"><a href="#!/Membership/Priviliges"><i class="fa fa-lock fa-2x"></i>Priviliges</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/Membership/PagesPriviliges' }"><a href="#!/Membership/PagesPriviliges"><i class="fa fa-lock fa-2x"></i>Pages Priviliges</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/Membership/Settings' }"><a href="#!/Membership/Settings"><i class="fa fa-cog fa-2x"></i>Settings</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/Membership/PredefinedLists' }"><a href="#!/Membership/PredefinedLists"><i class="fa fa-list-ul fa-2x"></i>Predefined Lists</a></li>*@
+
+    <li><a href="#!/Membership"><span class="title">Users</span></a></li>
+    @if (SABFramework.PreDefinedModules.MembershipModule.MembershipProvider.Instance.CurrentUserIsAdministrator)
+    {
+        <li><a href="#!/Membership/Roles"><span class="title">Roles</span></a></li>
+        <li><a href="#!/Membership/Companies"><span class="title">Companies</span></a></li>
+        <li><a href="#!/Membership/Priviliges"><span class="title">Priviliges</span></a></li>
+        <li><a href="#!/Membership/AppsPriviliges"><span class="title">Apps Priviliges</span></a></li>
+        <li><a href="#!/Membership/PagesPriviliges"><span class="title">Pages Priviliges</span></a></li>
+        <li><a href="#!/Membership/Settings"><span class="title">Settings</span></a></li>
+        <li><a href="#!/Membership/PredefinedLists"><span class="title">Predefined Lists</span></a></li>
+    }
+}
+@section AppContent{
+    <div class="subMenuContainer">
+        <div class="searchListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+        <div id="subMenuOpenCloseBtnCon"><i id="subMenuOpenCloseBtn" class="fa fa-caret-left"></i></div>
+    </div>
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+@RenderBody()

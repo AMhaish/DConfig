@@ -1,0 +1,179 @@
+﻿/*#region Main */
+header {
+    z-index: 1000;
+}
+
+a {
+    cursor: pointer;
+}
+/*#endregion */
+
+/*#region Windows */
+#mainContainer {
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+}
+
+#main {
+    width: 100%;
+    padding: 26px;
+    min-height: 500px;
+    margin: 0 auto;
+    overflow: auto;
+    height: 100%;
+    min-width: 1200px;
+}
+
+.glass {
+    position: relative;
+    padding: 10px 0;
+    border-bottom: 1px solid;
+    border-bottom-color: #ccc;
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    height: 180px;
+}
+
+    .glass::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20width%3D%221920%22%20height%3D%221120%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22blur%22%3E%3CfeGaussianBlur%20stdDeviation%3D%225%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cimage%20xlink%3Ahref%3D%22http%3A%2F%2Fplacekitten.com%2F1920%2F1120%22%20width%3D%221920%22%20height%3D%221120%22%20filter%3D%22url%28%23blur%29%22%2F%3E%3C%2Fsvg%3E");
+        background-position: center bottom;
+        background-attachment: fixed;
+        background-size: cover;
+        content: "";
+        filter: url("data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22blur%22%3E%3CfeGaussianBlur%20stdDeviation%3D%225%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3C%2Fsvg%3E#blur");
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+    }
+
+    .glass .legacy-ie-fix {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
+    }
+
+@media only screen {
+    .glass h1 {
+        -ms-filter: "none";
+    }
+}
+
+/*#endregion */
+
+/*#region Main Menu */
+#ferromenu-controller-0 {
+    color: #fff;
+    text-decoration: none;
+}
+
+    #ferromenu-controller-0:hover {
+        color: #fff;
+    }
+/*#endregion */
+
+/*#region Apps Menu */
+.appsContainer {
+    width: 100%;
+    overflow: hidden;
+    min-height:600px;
+}
+
+.app {
+    color: #FFFFFF;
+    float: left;
+    font-size: 13px;
+    margin: 24px;
+    text-align: center;
+    width: 72px;
+    height: 100px;
+}
+
+    .app a {
+        cursor: pointer;
+        color: #777;
+    }
+
+    .app img {
+        width: 100%;
+    }
+
+.settingsContainer {
+    width: 100%;
+    overflow: hidden;
+}
+
+.settings {
+    color: #FFFFFF;
+    float: left;
+    font-size: 14px;
+    margin: 24px;
+    text-align: center;
+    width: 64px;
+    height: 100px;
+}
+
+    .settings a {
+        cursor: pointer;
+        color: #777;
+        
+    }
+
+    .settings img {
+        width: 100%;
+        opacity:0.6;
+    }
+/*#endregion */
+
+/*#region Widgets */
+.widgetsContainer {
+    overflow: hidden;
+}
+
+.widget {
+    background: url("/Content/DConfigOS/images/wood2.jpg") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    color: #B49F80;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px;
+    text-shadow: 0 -1px #867A60, 0 1px #D8CDBB;
+    float: left;
+    padding: 5px;
+}
+
+.s-s-w {
+    width: 230px;
+    height: 230px;
+}
+
+.m-s-w {
+    width: 480px;
+    height: 230px;
+}
+
+.s-m-w {
+    height: 480px;
+    width: 230px;
+}
+
+.m-m-w {
+    width: 480px;
+    height: 480px;
+}
+
+/*#endregion */
+
+.breadcrumb{
+    background-color:#fff;
+}

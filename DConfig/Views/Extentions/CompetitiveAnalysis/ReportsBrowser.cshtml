@@ -1,0 +1,18 @@
+﻿<div id="reportsBrowser">
+    <div class="modal-header">
+        <h3 class="modal-title">Reports Chooser</h3>
+    </div>
+    <div class="modal-body" data-ng-init="initialize()">
+        <h3>Comparisons</h3>
+        <div class="valueField">
+            <input type="text" name="comparisonsSearchBox" id="comparisonsSearchBox" placeholder="Search Products Comparisons" data-ng-model="comparisonsSearchText.Name">
+            <ul id="productsTree_productSelector" class="list-group" style="height:400px;overflow:auto;border:1px solid #ccc;">
+                <li data-ng-repeat="p in reports | filter:comparisonsSearchText" class="list-group-item"><a ng-click="ok(p.Id)">{{p.Name}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+        <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+    </div>
+</div>

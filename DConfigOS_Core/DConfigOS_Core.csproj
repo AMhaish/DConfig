@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C279FF4-E7D7-4894-B8BE-1B923A6CBFEC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DConfigOS_Core</RootNamespace>
+    <AssemblyName>DConfigOS_Core</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="BitArmory.ReCaptcha, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BitArmory.ReCaptcha.3.0.0\lib\net45\BitArmory.ReCaptcha.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=6.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.6.0.1\lib\net45\Elasticsearch.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.2.8.0\lib\net40\Flurl.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.Http.2.4.0\lib\net46\Flurl.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit, Version=1.1.15.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.15\lib\net45\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.3.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.9.3.2\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="MsgPack, Version=0.1.4298.15470, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MsgPack.0.1.0.2011042300\lib\net40\MsgPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Nest, Version=6.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.6.0.1\lib\net45\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet, Version=2.7.41115.310, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\.nuget\NuGet.exe</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Core">
+      <HintPath>..\.nuget\NuGet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.4.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DConfigOSInitializer.cs" />
+    <Compile Include="Layer2\IOServices\CUDResourcesWatermarkFilesAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUCustomSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUSMSSettingsAction.cs" />
+    <Compile Include="DIInitializer.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\DeactivateContentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CTemplateCloneAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUViewFieldsEnumValueAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\ExportTemplateExcelAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsByViewTypeByQueryAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsChildrenCountAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GenerateSitemapAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldsEnumValueByIdAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldsEnumValuesByIdAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\ImportContentsFromExcelAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UScriptsOrderAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UStylesOrderAction.cs" />
+    <Compile Include="Models\BlobDirectory.cs" />
+    <Compile Include="Models\Blob.cs" />
+    <Compile Include="Models\BlobContainer.cs" />
+    <Compile Include="Models\QueryResults.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigDataHelper.cs" />
+    <Compile Include="Repositories\AppsServices\AppsAPI.cs" />
+    <Compile Include="Repositories\AppsServices\AppsExtentionsAPI.cs" />
+    <Compile Include="Repositories\AppsServices\IAppAPIRepository.cs" />
+    <Compile Include="Repositories\AppsServices\IAppsExtentionsAPI.cs" />
+    <Compile Include="Repositories\AppsServices\IPackagesAPI.cs" />
+    <Compile Include="Repositories\AppsServices\IWidgetsAPIRepository.cs" />
+    <Compile Include="Repositories\AppsServices\PackagesAPI.cs" />
+    <Compile Include="Repositories\AppsServices\WidgetsAPI.cs" />
+    <Compile Include="Repositories\IOServices\AzureBlobsAPI.cs" />
+    <Compile Include="Repositories\IOServices\FoldersAPI.cs" />
+    <Compile Include="Repositories\IOServices\IFoldersAPI.cs" />
+    <Compile Include="Repositories\RepositoryBase.cs" />
+    <Compile Include="Repositories\Utilities\ErrorCodes.cs" />
+    <Compile Include="Repositories\Utilities\SpreedsheetHelper.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\Elastic\ElasticSearchContentsRepository.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IContentsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IFormFieldsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IFormsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IFormsFieldsEnumsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IFormsInstancesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IFormSubmitEventsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IScriptsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IScriptsBundlesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IStagesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IStylesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IStylesBundlesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ITemplatesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IViewFieldsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IViewFieldsEnumsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\IViewTypesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\StagesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ViewFieldsEnumsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\FormsFieldsEnumsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\FormSubmitEventsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\FormsInstancesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ScriptsBundlesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\StylesBundlesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\StylesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ScriptsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\TemplatesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\FormFieldsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ViewFieldsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\FormsAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ViewTypesAPI.cs" />
+    <Compile Include="Repositories\WebsiteContentServices\ContentsAPI.cs" />
+    <Compile Include="Layer2\AppsServices\AllAppsAction.cs" />
+    <Compile Include="Layer2\AppsServices\UpdateAppVersonFileAction.cs" />
+    <Compile Include="Layer2\AppsServices\GetAppVersionMetaDataAction.cs" />
+    <Compile Include="Layer2\AppsServices\CheckAppUpdates.cs" />
+    <Compile Include="Layer2\AppsServices\UninstallAppAction.cs" />
+    <Compile Include="Layer2\AppsServices\AppExtentionViewAction.cs" />
+    <Compile Include="Layer2\AppsServices\AppExtentionScriptsFileAction.cs" />
+    <Compile Include="Layer2\AppsServices\IntentExtentionsAction.cs" />
+    <Compile Include="Layer2\AppsServices\AppStylesFileAction.cs" />
+    <Compile Include="Layer2\AppsServices\AppScriptsFileAction.cs" />
+    <Compile Include="Layer2\AppsServices\DesktopWidgetsAction.cs" />
+    <Compile Include="Layer2\AppsServices\UAppsRoles.cs" />
+    <Compile Include="Layer2\AppsServices\WidgetsAction.cs" />
+    <Compile Include="Layer2\AppsServices\AppsAction.cs" />
+    <Compile Include="Layer2\FormsServices\CUDFormSubmitEmailEventsAction.cs" />
+    <Compile Include="Layer2\FormsServices\CUDFormsFieldsEnumsAction.cs" />
+    <Compile Include="Layer2\FormsServices\FormBaseAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormsInstancesAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormsFieldsEnumsAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormsFieldsEnumsTreeAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormsAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetRootFormsAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormSubmitEventsTypesAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetRootFormsTree.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormSubmitEventsTreeAction.cs" />
+    <Compile Include="Layer2\FormsServices\RenderFormPrintVersionAction.cs" />
+    <Compile Include="Layer2\FormsServices\RenderFormAction.cs" />
+    <Compile Include="Layer2\FormsServices\FormSubmitAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormTypesAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormFieldTypesAction.cs" />
+    <Compile Include="Layer2\FormsServices\FormSubmitFieldValueAction.cs" />
+    <Compile Include="Layer2\FormsServices\UDFormInstancesAction.cs" />
+    <Compile Include="Layer2\FormsServices\UDFormsFieldsEnumValuesAction.cs" />
+    <Compile Include="Providers\DataContexts\DConfigOS_Core_ElasticSearchContext.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigBundler.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigEmailModel.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigFormModel.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigRequestContext.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigView.cs" />
+    <Compile Include="Providers\HttpContextProviders\DConfigModel.cs" />
+    <Compile Include="Providers\HttpContextProviders\DconfigHtmlHelper.cs" />
+    <Compile Include="Layer2\ActionsModels\ContentsTreeNodeModel.cs" />
+    <Compile Include="Layer2\FormsServices\CUDFormsAction.cs" />
+    <Compile Include="Layer2\IOServices\GetSystemStorageUsageAction.cs" />
+    <Compile Include="Layer2\IOServices\CUDResourcesFilesAction.cs" />
+    <Compile Include="Layer2\IOServices\CUDResourcesFoldersAction.cs" />
+    <Compile Include="Layer2\IOServices\GetResourcesFilesAction.cs" />
+    <Compile Include="Layer2\IOServices\GetResourcesFoldersTreeAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RLogFileAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RLogsSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUDatabaseSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUDateTimeSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RULanguagesSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUSecuritySettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUNotificationsSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUSystemInfoSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUSystemUpdateSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUSupportSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUBackupSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUAppearanceSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUIdentitySettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUEmailSettingsAction.cs" />
+    <Compile Include="Layer2\SettingsServices\RUGeneralSettingsAction.cs" />
+    <Compile Include="Layer2\UserActionsBase.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CContentCloneAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CContentInstanceCloneAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\ActivateContentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDStagesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDViewFieldsEnumsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentInstancesFieldsValuesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentInstancesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentInstancesForPrevVersionsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsByViewTypeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsChildrenAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsListsTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetNextStagesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetQuickContentList.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStageRolesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStagesbyRoleAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStagesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldsEnumValuesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldsEnumsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldsEnumsTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetSitemapAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\RenderEditableContentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentFieldValueAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentInstanceStageAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UDContentDomainsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentsOrderAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDScriptsBundlesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDStylesBundlesAction.cs" />
+    <Compile Include="Layer2\FormsServices\GetFormsTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetScriptsBundlesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStylesBundlesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\RenderStylesTagAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\RenderScriptsTagAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetTemplateViewTypeFieldsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetTemplatesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewFieldTypesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewTypesChildrenAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDViewTypesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDStylesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDScriptsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDTemplatesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetRootViewTemplatesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetScriptsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStylesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetStylesTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetScriptsTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentFieldsValuesAction.cs" />
+    <Compile Include="Layer2\FormsServices\UDFormFieldsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UDStageRolesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UDViewFieldsEnumValuesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UNextStagesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UViewTypeChildrenAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UDViewTypeFieldsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewTypesTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetViewTypesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetRootViewTypesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetTemplatesTreeAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\URScriptCode.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\URStyleCode.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\URTemplateViewAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\RenderContentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentInstanceParentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDContentInstancesAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UTemplateLayoutAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\UContentParentAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\CUDContentsAction.cs" />
+    <Compile Include="Layer2\WebsiteContentServices\GetContentsTreeAction.cs" />
+    <Compile Include="Models\App.cs" />
+    <Compile Include="Models\AppExtention.cs" />
+    <Compile Include="Models\AppStyleSheet.cs" />
+    <Compile Include="Models\ContentInstance.cs" />
+    <Compile Include="Models\Domain.cs" />
+    <Compile Include="Models\ExApplicationUser.cs" />
+    <Compile Include="Models\FileMetaData.cs" />
+    <Compile Include="Models\Stage.cs" />
+    <Compile Include="Models\ViewFieldsEnumValue.cs" />
+    <Compile Include="Models\FormFieldsEnumValue.cs" />
+    <Compile Include="Models\ViewFieldsEnum.cs" />
+    <Compile Include="Models\FormSubmitEmailEvent.cs" />
+    <Compile Include="Models\FormSubmitEvent.cs" />
+    <Compile Include="Models\FormInstance.cs" />
+    <Compile Include="Models\Form.cs" />
+    <Compile Include="Models\FormsFieldsEnum.cs" />
+    <Compile Include="Models\FormSubmitEventType.cs" />
+    <Compile Include="Models\ScriptsBundle.cs" />
+    <Compile Include="Models\StylesBundle.cs" />
+    <Compile Include="Models\Utilities.cs" />
+    <Compile Include="Models\FormsType.cs" />
+    <Compile Include="Models\FormsField.cs" />
+    <Compile Include="Models\FieldsType.cs" />
+    <Compile Include="Models\AppExtentionClientLogic.cs" />
+    <Compile Include="Models\FormFieldValue.cs" />
+    <Compile Include="Models\WidgetClientLogic.cs" />
+    <Compile Include="Models\AppClientLogic.cs" />
+    <Compile Include="Models\AppExtentionView.cs" />
+    <Compile Include="Models\WidgetView.cs" />
+    <Compile Include="Models\AppView.cs" />
+    <Compile Include="Models\DesktopWidget.cs" />
+    <Compile Include="Models\AppWidget.cs" />
+    <Compile Include="Models\Content.cs" />
+    <Compile Include="Providers\DataContexts\DConfigOS_Core_DBContext.cs" />
+    <Compile Include="Models\PublicViewsPackage.cs" />
+    <Compile Include="Models\Script.cs" />
+    <Compile Include="Models\StyleSheet.cs" />
+    <Compile Include="Models\ViewField.cs" />
+    <Compile Include="Models\ViewFieldValue.cs" />
+    <Compile Include="Models\ViewTemplate.cs" />
+    <Compile Include="Models\ViewType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ResourcesProviders\BundlesProvider.cs" />
+    <Compile Include="Providers\ResourcesProviders\RedisScriptBundle.cs" />
+    <Compile Include="Providers\ResourcesProviders\SitemapProvider.cs" />
+    <Compile Include="Responses\RecaptchaResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EmbeddedResource Include="Repositories\AppsServices\PackageConfig.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repositories\AppsCommunicationsServices\" />
+    <Folder Include="Repositories\ResourcesServices\" />
+    <Folder Include="Repositories\WebConfigurationServices\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SABFramework\SABFramework.csproj">
+      <Project>{c727fa78-2ba0-4d30-935a-a32ae553462a}</Project>
+      <Name>SABFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

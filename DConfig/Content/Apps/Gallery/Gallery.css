@@ -1,0 +1,51 @@
+﻿.drop-box {
+    width: 100%;
+    height: 200px;
+    border: 1px dashed #999;
+    display: inline-block;
+}
+
+.uploadButton {
+    margin-bottom: 30px;
+}
+
+.file {
+    float: left;
+    display: inline-block;
+    width: 128px;
+    height: 150px;
+    margin: 20px;
+    text-align: center;
+    position:relative;
+}
+
+
+    .file img {
+        max-width: 126px;
+        max-height: 126px;
+    }
+
+.file .fileIcon {
+    float: left;
+    width:126px;
+    height:126px;
+}
+
+.file .fileCommands {
+    width: 60px;
+    height: 20px;
+    position:absolute;
+    right:-16px;
+    top:-16px;
+    text-align: center;
+    font-size:17px;
+}
+.file .fileCommands li{
+    cursor:pointer;
+}
+.file .fileName {
+    float: left;
+    width: 100%;
+    text-align: center;
+    word-wrap: break-word;
+}

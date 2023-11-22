@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@section AppMenu{
+    
+        @*<li data-ng-class="{ active: _CurrentPath == '/CompetitiveAnalysis' }"><a href="#!/CompetitiveAnalysis"><i class="fa fa-video-camera fa-2x"></i>Products</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/CompetitiveAnalysis/Comparison' }"><a href="#!/CompetitiveAnalysis/Comparison"><i class="fa fa-bar-chart fa-2x"></i>Comparison</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/CompetitiveAnalysis/Templates' }"><a href="#!/CompetitiveAnalysis/Templates"><i class="fa fa-file-video-o fa-2x"></i>Products Types</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/CompetitiveAnalysis/Properties' }"><a href="#!/CompetitiveAnalysis/Properties"><i class="fa fa-list-alt fa-2x"></i>Properties</a></li>
+        <li data-ng-class="{ active: _CurrentPath == '/CompetitiveAnalysis/PredefinedLists' }"><a href="#!/CompetitiveAnalysis/PredefinedLists"><i class="fa fa-list-ul fa-2x"></i>Predefined Lists</a></li>*@
+
+<li><a href="#!/CompetitiveAnalysis"><span class="title">Products</span></a></li>
+<li><a href="#!/CompetitiveAnalysis/Comparison"><span class="title">Comparison</span></a></li>
+<li><a href="#!/CompetitiveAnalysis/Templates"><span class="title">Products Types</span></a></li>
+<li><a href="#!/CompetitiveAnalysis/Properties"><span class="title">Properties</span></a></li>
+<li><a href="#!/CompetitiveAnalysis/PredefinedLists"><span class="title">Predefined Lists</span></a></li>
+<li><a href="#!/CompetitiveAnalysis/AdvancedPrivileges"><span class="title">Advanced Privileges</span></a></li>
+
+}
+@section AppContent{
+    @RenderSection("ListMenu")
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+@RenderBody()

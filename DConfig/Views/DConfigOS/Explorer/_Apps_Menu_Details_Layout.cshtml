@@ -1,0 +1,16 @@
+﻿<div id="Menu_SubMenu_Details">
+    <div class="menuContainer">
+        @RenderSection("SectionsList")
+    </div>
+    <div class="contentContainer">
+        <div class="subMenuContainer">
+            <div id="searchListTopMenu" class="searchListTopMenu">@RenderSection("SearchListTopMenu")</div>
+            <div id="searchListContent">@RenderSection("SearchList")</div>
+            
+        </div>
+        <div class="detailsContainer">
+            <div class="detailsTopMenu">@RenderSection("DetailsTopMenu")</div>
+            <div id="formsContainer">@RenderSection("Details")</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@model DConfigOS_Core.Providers.HttpContextProviders.DConfigFormModel
+<div class="singleFormContainer">
+    <form method="post" class="form-horizontal" enctype="multipart/form-data"
+          action="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ?
+          "/DConfig/FormsAPI/SubmitForm/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&": "") + "PageUrl=" + Model.PageUrl 
+          : 
+          (Model.PageForm.CustomSubmitPath.Contains('?') ?
+            Model.PageForm.CustomSubmitPath.Substring(0, Model.PageForm.CustomSubmitPath.IndexOf('?')) + "/" + Model.PageForm.Id + Model.PageForm.CustomSubmitPath.Substring(Model.PageForm.CustomSubmitPath.IndexOf('?'), Model.PageForm.CustomSubmitPath.Length - Model.PageForm.CustomSubmitPath.IndexOf('?')) + "&" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl
+            :
+            Model.PageForm.CustomSubmitPath + "/" + Model.PageForm.Id + "?" + (ViewContext.HttpContext.Request.QueryString["returnUrl"] != null ? "returnUrl=" + ViewContext.HttpContext.Request.QueryString["returnUrl"] + "&" : "") +"PageUrl=" + Model.PageUrl))">
+        @if (!Model.IsValid)
+        {
+            @Html.ValidationSummary(true)
+        }
+        <div>
+            @Html.Partial("~/Views/DConfigOS/Partials/_formFieldsTemplate.cshtml", Model)
+            <div class="row submitRow">
+                <div class="col-sm-6 fieldsText"></div>
+                <div class="col-sm-6">
+                    <input type="submit" value="@(String.IsNullOrEmpty(Model.PageForm.SubmitButtonText) ? "Submit" : Model.PageForm.SubmitButtonText)" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

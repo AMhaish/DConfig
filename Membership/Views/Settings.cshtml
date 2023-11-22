@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/AppsViews/Membership/_MembershipLayout.cshtml";
+}
+@section SearchListTopMenu{
+    @*<input type="text" data-ng-model="searchText.UserName" />*@
+}
+@section DetailsTopMenu{
+
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: state == DetailsPanelStates.DefinedUsersProporties }">
+            <a data-ng-click="displayDefinedUsersProporties()">Defined Users Proporties</a>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Settings</h3>
+            </div>
+        </div>
+        <div id="definedProportiesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.DefinedUsersProporties">
+            <div class="modal-header">
+                <h3 class="modal-title">Proporties</h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="PredefinedListAcc">
+                    <div class="card panel" ng-repeat="field in currentObj.DefinedUserProporties">
+                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#PredefinedListAcc" data-target="#List{{$index}}">
+                            <header>{{field.Name}}</header>
+                            <div class="tools">
+                                <a class="btn btn-icon-toggle">
+                                    <i class="pull-right glyphicon fa fa-times" data-ng-click="removeDefinedUserProportiesNewField($index)"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="List{{$index}}" class="collapse">
+                            <div class="card-body">
+                                <form name="fieldForm{{$index}}" class="form" novalidate>
+                                    <div class="form-group">
+                                        <input class="form-control" name="name" type="text" data-ng-model="field.Name" value="" required data-ng-minlength="2" data-ng-maxlength="50" />
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.name.$dirty && fieldForm{{$index}}.name.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.required">
+                                                Field name is required.
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.minlength">
+                                                Field name is required to be at least 2 characters
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.maxlength">
+                                                Field name cannot be longer than 50 characters
+                                            </small>
+                                        </span>
+                                        <label for="name">Name</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="type" data-ng-model="field.Type" data-ng-options="v.Name as v.Name for v in FieldsTypes" required></select>
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.type.$dirty && fieldForm{{$index}}.type.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.name.$error.required">
+                                                Field type is required.
+                                            </small>
+                                        </span>
+                                        <label for="type">Type</label>
+                                    </div>
+                                    <div class="form-group" data-ng-show="field.Type.contains('Predefined List')">
+                                        <select name="list" data-ng-model="field.EnumId" data-ng-options="v.Id as v.Name for v in Enums">
+                                            <option value=""></option>
+                                        </select>
+                                        <label for="list">Predefiend List</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div><!--end .panel -->
+                </div><!--end .panel-group -->
+                <br />
+                <input type="button" value="Add Field" class="btn btn-success" data-ng-click="addDefinedUserProportiesNewField()" />
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveDefinedUserProporties()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+    </div>
+}

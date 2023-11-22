@@ -1,0 +1,123 @@
+﻿@{
+    Layout = "~/Views/AppsViews/WebsiteManager/_WebsiteManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="scriptsSearchBox" id="scriptsSearchBox" />
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+    <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptCode }" data-ng-click="displayCode()">Code</a></li>
+    <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+</ul>
+}
+@section SearchList{
+    <div id="scriptsTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ScriptDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Script Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" novalidate>
+                    <div class="textField">Name</div>
+                    <div class="valueFiled">
+                        <input type="text" name="name" data-ng-model="currentObj.Name" value="" placeholder="Name" />
+                        <span class="error-container"
+                              ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.maxlength">
+                                Name cannot be longer than 20 characters
+                            </small>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="codeForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ScriptCode">
+            <div class="modal-header">
+                <h3 class="modal-title">Script Code</h3>
+            </div>
+            <div class="modal-body">
+                <pre id="codeTextArea" class="codeEditor">
+                </pre>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveCode()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Scripts</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createNode()">Create Root Node</a>
+            </div>
+            @*<div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create new node</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate>
+                    <div class="textField">Name</div>
+                    <div class="valueFiled">
+                        <input type="text" name="name" data-ng-model="newNode.Name" value="" placeholder="Name" required data-ng-minlength="3" data-ng-maxlength="20" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 20 characters
+                            </small>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="DeleteConfirmation.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Deleting node confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <div class="textField">Are you sure you want to delete this node?</div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

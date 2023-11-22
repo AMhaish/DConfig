@@ -1,0 +1,105 @@
+﻿@model DConfigOS_Core.Providers.HttpContextProviders.DConfigFormModel
+@foreach (FormsField f in Model.PageForm.FormFields.OrderBy(m => m.Priority))
+{
+    if (!(f.Invisible.HasValue && f.Invisible==true))
+    {
+        <div class="form-group">
+            @switch (f.Type)
+            {
+                case "Label":
+                    break;
+                default:
+                    <label for="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="col-sm-4 control-label horzFormField">@f.Title</label>
+                    break;
+            }
+            @*<div class="col-sm-4 fieldsText">@f.Title</div>*@
+            <div class="@(f.Type!="Label"?"col-sm-8":"col-sm-12")">
+                @switch (f.Type)
+                {
+                    case "Boolean":
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="radio" class="form-control" value="True" @(f.Required ? "required" : "") placeholder="@f.Title"/><span>True</span>
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="radio" class="form-control" value="False" @(f.Required ? "required" : "") placeholder="@f.Title"/><span>False</span>
+                        break;
+                    case "String":
+                    case "Number":
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="text" class="form-control" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")" @(f.Required ? "required" : "") placeholder="@f.Title"/>
+                        break;
+                    case "Password":
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="password" class="form-control" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")" @(f.Required ? "required" : "") placeholder="@f.Title"/>
+                        break;
+                    case "String - Multiple Lines":
+                        <textarea name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="form-control" placeholder="@f.Title" @(f.Required ? "required" : "")>@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id) ? Model.PageFormFieldsValues[f.Id] : "")</textarea>
+                        break;
+                    case "Predefined List":
+                    case "Predefined List - Filter/Select":
+                        <select name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="form-control" @(f.Required ? "required" : "") placeholder="@f.Title">
+                            <option value="">--@(f.Title)--</option>
+                            @if (f.Enum != null)
+                            {
+                                foreach (var val in f.Enum.Values.OrderBy(m => m.Value))
+                                {
+                                    <option value="@val.Value">@val.Value</option>
+                                }
+                            }
+                        </select>
+                        break;
+                    case "Date":
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="text" class="form-control datePicker" placeholder="@f.Title" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")" @(f.Required ? "required" : "") />
+                        break;
+                    case "Predefined List - Checkboxes":
+                        if (f.Enum != null)
+                        {
+                            foreach (var val in f.Enum.Values.OrderBy(m => m.Value))
+                            {
+                                <label class="checkbox-inline checkbox-styled col-sm-6">
+                                    <input type="checkbox" name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="form-control"  value="@val.Value" />
+                                    <span>@val.Value</span>
+                                </label>
+                            }
+                        }
+                        break;
+                    case "Predefined List - Radio Buttons":
+                        if (f.Enum != null)
+                        {
+                            foreach (var val in f.Enum.Values.OrderBy(m => m.Value))
+                            {
+                                <label class="radio-inline radio-styled col-sm-6">
+                                    <input type="radio" name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="form-control" value="@val.Value" />
+                                    <span>@val.Value</span>
+                                </label>
+
+                            }
+                        }
+                        break;
+                    case "Predefined List - Radio or Other":
+                        <div class="radioOtherControl">
+                            @if (f.Enum != null)
+                            {
+                                foreach (var val in f.Enum.Values.OrderBy(m => m.Value))
+                                {
+                                    <label class="radio-inline radio-styled col-sm-6 other">
+                                        <input type="radio" name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" class="form-control" value="@val.Value" />
+                                        <span>@val.Value</span>
+                                    </label>
+                                }
+                                <label class="radio-inline radio-styled col-sm-12 other">
+                                    <input type="radio" class="form-control" value="" name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" data-enable-other="true" />
+                                    <span>Other</span>
+                                </label>
+                                <input disabled="disabled" name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="text" class="form-control otherBox" value="@(Model.PageFormFieldsValues != null && Model.PageFormFieldsValues.ContainsKey(f.Id)?Model.PageFormFieldsValues[f.Id]:"")" @(f.Required ? "required" : "") />
+                            }
+                        </div>
+                        break;
+                    case "Label":
+                        <div>@f.Title</div>
+                        break;
+                    case "File":
+                        <input name="@(String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "")@(f.Name)" type="file" class="form-control"  @(f.Required ? "required" : "")/>
+                        break;
+                }
+                @Html.ValidationMessage((String.IsNullOrEmpty(Model.PageForm.CustomSubmitPath) ? Model.PageForm.Name + "_" : "") + (f.Name))
+            </div>
+
+        </div>
+    }
+}

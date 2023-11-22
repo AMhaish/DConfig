@@ -1,0 +1,37 @@
+﻿@using WebsiteManager.Properties
+@{
+    Layout = "~/Views/DConfigOS/Explorer/Apps_Layout.cshtml";
+}
+@*@section AppHeader{
+        <header>
+            Website Manager
+        </header>
+    }*@
+@section AppMenu{
+    @*<li><a href="#!/WebsiteManager" data-ng-class="{ active: _CurrentPath == '/WebsiteManager' }"><div class="gui-icon"><i class="fa fa-file-o fa-2x"></i></div><span class="title">Content</span></a></li>
+        <li><a href="#!/WebsiteManager/Templates" data-ng-class="{ active: _CurrentPath == '/WebsiteManager/Templates' }"><div class="gui-icon"><i class="fa fa-file-code-o fa-2x"></i></div><span class="title">Templates</span></a></li>
+        <li><a href="#!/WebsiteManager/ViewTypes" data-ng-class="{ active: _CurrentPath == '/WebsiteManager/ViewTypes' }"><div class="gui-icon"><i class="fa fa-file-code-o fa-2x"></i></div><span class="title">View Types</span></a></li>
+        <li><a href="#!/WebsiteManager/Scripts" data-ng-class="{ active: _CurrentPath == '/WebsiteManager/Scripts' }"><div class="gui-icon"><i class="fa fa-file-code-o fa-2x"></i></div><span class="title">Scripts</span></a></li>
+        <li><a href="#!/WebsiteManager/Styles" data-ng-class="{ active: _CurrentPath == '/WebsiteManager/Styles' }"><div class="gui-icon"><i class="fa fa-file-code-o fa-2x"></i></div><span class="title">Styles</span></a></li>
+        <li><a href="#!/WebsiteManager/PredefinedLists" data-ng-class="{ active: _CurrentPath == '/WebsiteManager/PredefinedLists' }"><div class="gui-icon"><i class="fa fa-list-ul fa-2x"></i></div><span class="title">Predefined Lists</span></a></li>*@
+    <li><a href="#!/WebsiteManager"><span class="title">Quick Contents</span></a></li>
+    <li><a href="#!/WebsiteManager/Contents"><span class="title">Contents</span></a></li>
+    <li><a href="#!/WebsiteManager/Stages"><span class="title">Stages</span></a></li>
+    <li><a href="#!/WebsiteManager/Templates"><span class="title">Templates</span></a></li>
+    <li><a href="#!/WebsiteManager/ViewTypes"><span class="title">View Types</span></a></li>
+    <li><a href="#!/WebsiteManager/Scripts"><span class="title">Scripts</span></a></li>
+    <li><a href="#!/WebsiteManager/Styles"><span class="title">Styles</span></a></li>
+    <li><a href="#!/WebsiteManager/PredefinedLists"><span class="title">Predefined Lists</span></a></li>
+}
+@section AppContent{
+    <div class="subMenuContainer">
+        <div class="searchListTopMenu">@RenderSection("SearchListTopMenu", false)</div>
+        <div id="searchListContent">@RenderSection("SearchList", false)</div>
+        <div id="subMenuOpenCloseBtnCon"><i id="subMenuOpenCloseBtn" class="fa fa-caret-left"></i></div>
+    </div>
+    <div class="detailsContainer">
+        <div class="detailsTopMenu">@RenderSection("DetailsTopMenu", false)</div>
+        <div id="formsContainer">@RenderSection("Details", false)</div>
+    </div>
+}
+@RenderBody()

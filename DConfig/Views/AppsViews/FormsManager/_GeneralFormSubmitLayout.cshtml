@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-ng-app="DConfig">
+<head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>DConfig</title>
+    @Styles.Render("~/Content/libs")
+    @Styles.Render("~/Content/dconfig")
+    @Scripts.Render("~/bundles/generalForms")
+    @Scripts.Render("~/bundles/system")
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div id="page" class="container" data-ng-view="">
+        <h1>@ViewBag.FormName</h1>
+        <br />
+        @RenderBody()
+    </div>
+    <div id="loading">
+        <span></span>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+﻿<section class="section-account">
+    <div class="img-backdrop" style="background-image: url('/Content/img/img16.jpg')"><img src="/Content/DConfigOS/images/logo.png" /></div>
+    <div class="spacer"></div>
+    <div class="card contain-sm style-transparent">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <br />
+                    <span class="text-lg text-bold text-primary">DCONFIG FORGET PASSWORD</span>
+                    <br /><br />
+                    <form class="form" novalidate="novalidate">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="User" name="User" data-ng-model="user.email">
+                            <label for="username">Email</label>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6 text-left">
+                            </div><!--end .col -->
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-default btn-raised" type="submit" data-ng-click="backToLogin()">Return back</button>
+                                <button class="btn btn-primary btn-raised" type="submit" data-ng-click="doResetPassword()">Reset my password</button>
+                            </div><!--end .col -->
+                        </div><!--end .row -->
+                    </form>
+                </div><!--end .col -->
+                @*<div class="col-sm-5 col-sm-offset-1 text-center">
+                                    <br><br>
+                                    <h3 class="text-light">
+                                        No account yet?
+                                    </h3>
+                                    <a class="btn btn-block btn-raised btn-primary" href="#" data-ng-click="goToRegisterPage()">Sign up here</a>
+                                    <h3 class="text-light">
+                                or
+                            </h3>
+                            <p>
+                                <a href="#" class="btn btn-block btn-raised btn-info" data-ng-click="doExternalLogin('Google')"><i class="fa fa-google pull-left"></i>Login with Facebook</a>
+                            </p>
+                            <p>
+                                <a href="#" class="btn btn-block btn-raised btn-info" data-ng-click="doExternalLogin('Microsoft')"><i class="fa fa-windows pull-left"></i>Login with Microsoft</a>
+                            </p>
+                            <p>
+                                <a href="#" class="btn btn-block btn-raised btn-info" data-ng-click="doExternalLogin('Facebook')"><i class="fa fa-facebook pull-left"></i>Login with Facebook</a>
+                            </p>
+                            <p>
+                                <a href="#" class="btn btn-block btn-raised btn-info" data-ng-click="doExternalLogin('Twitter')"><i class="fa fa-twitter pull-left"></i>Login with Twitter</a>
+                            </p>
+                    </div>*@
+            </div><!--end .row -->
+        </div><!--end .card-body -->
+    </div><!--end .card -->
+</section>
+<!-- END LOGIN SECTION -->

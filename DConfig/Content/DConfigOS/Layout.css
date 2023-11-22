@@ -1,0 +1,268 @@
+﻿/*#region Main */
+#loading{
+    background-color:#333;
+    opacity:0.7;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index:950;
+}
+#loading span{
+    background-image:url(/Content/DConfigOS/images/loading.gif);
+    display:block;
+    width:220px;
+    height:19px;
+    margin:400px auto 0;
+}
+#progress{
+    background-color:#333;
+    opacity:0.7;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index:950;
+}
+#progress .progress{
+    display:block;
+    width:300px;
+    height:19px;
+    margin:400px auto 0;
+}
+.smallLoading{
+    width:100%;
+    height:100%;
+    z-index:950;
+    position:relative;
+}
+.smallLoading span{
+    background-image:url(/Content/DConfigOS/images/loading.gif);
+    display:block;
+    width:110px;
+    height:13px;
+    margin:auto;
+    top:50%;
+    position:relative;
+    background-position:center;
+    border-left:1px solid #999;
+    border-right:1px solid #999;
+}
+
+#breadcrumb{
+    display:none;
+}
+
+/*#region Forms Elements */
+
+textarea {
+    font-family: inherit;
+    width: 500px;
+}
+
+/*#endregion */
+
+
+/*#region Login Page */
+#loginForm {
+    border-right: solid 2px #c8c8c8;
+    float: left;
+    width: 55%;
+}
+
+    #loginForm .validation-error {
+        display: block;
+        margin-left: 15px;
+    }
+
+    #loginForm .validation-summary-errors ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    #loginForm .validation-summary-errors li {
+        display: inline;
+        list-style: none;
+        margin: 0;
+    }
+
+    #loginForm input {
+        width: 250px;
+    }
+
+        #loginForm input[type="checkbox"],
+        #loginForm input[type="submit"],
+        #loginForm input[type="button"],
+        #loginForm button {
+            width: auto;
+        }
+
+#socialLoginForm {
+    margin-left: 40px;
+    float: left;
+    width: 40%;
+}
+
+    #socialLoginForm h2 {
+        margin-bottom: 5px;
+    }
+
+#socialLoginList button {
+    margin-bottom: 12px;
+}
+
+#logoutForm {
+    display: inline;
+}
+/*#endregion */
+
+/*#region Info and Errors */
+.message-info {
+    border: 1px solid;
+    clear: both;
+    padding: 10px 20px;
+}
+
+.message-error {
+    clear: both;
+    color: #e80c4d;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.message-success {
+    color: #7ac0da;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.error {
+    color: #e80c4d;
+}
+/*#endregion */
+
+/*#region Validation helpers */
+.field-validation-error {
+    color: #e80c4d;
+    font-weight: bold;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+/*#endregion */
+
+/*#region General Pages Styles */
+/* login
+----------------------------------------------------------*/
+.container {
+    display: block;
+    font-size: .85em;
+    margin: 100px auto 0;
+    background: #fff;
+    width: 1000px;
+    padding: 20px;
+    box-shadow:0px 0px 5px 0px #808080;
+}
+
+/*#endregion */
+
+/*#region DConfig Form Styles*/
+/*Custom styles*/
+#page .formsHeader {
+    color: #cc3333;
+    font-size: 24px;
+    font-weight: normal;
+    padding-bottom: 10px;
+    margin: 13px 0;
+}
+
+
+/*Main Form styles*/
+#page .singleFormContainer .row {
+    margin: 0;
+}
+
+#page .singleFormContainer {
+    padding: 15px 0px 15px 0px;
+    font-weight: normal;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+
+    #page .singleFormContainer table {
+        width: 100%;
+    }
+
+
+#page #sectionsFormContainer {
+    padding-top: 20px;
+}
+
+    #page #sectionsFormContainer .tab-content {
+        padding: 20px;
+        border-right: 1px solid #dddddd;
+        border-left: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    #page #multipleSameChildFormContainer .tab-content {
+        padding: 20px;
+        border: 1px solid #dddddd;
+    }
+
+    #page #sectionsFormContainer ul a {
+        font-size: 16px;
+    }
+
+    #page #sectionsFormContainer .radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline{
+        margin-left:0;
+    }
+
+    #page .radio + .radio, .checkbox + .checkbox{
+        margin-top:0;
+    }
+/*#endregion */
+
+/*Bootstrap overloads*/
+.modal-body{
+    overflow:hidden;
+}
+.radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline{
+    margin-left:0px;
+}
+.horzFormField{
+    padding:10px 0;
+}
+.sub-form-group {
+    overflow: hidden;
+    margin-top: 10px;
+}
+/*=======================*/

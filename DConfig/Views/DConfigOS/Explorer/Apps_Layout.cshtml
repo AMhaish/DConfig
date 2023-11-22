@@ -1,0 +1,15 @@
+﻿<div class="row">
+    <div class="card card-outlined style-primary">
+        @*<div class="card-head">
+             @RenderSection("AppHeader",false)
+        </div>*@
+        <div id="Menu_SubMenu_Details" @*class="card-body"*@>
+            <div class="menuContainer" id="appMenuContainer">
+                @RenderSection("AppMenu",false)
+            </div>
+            <div class="contentContainer">
+                @RenderSection("AppContent",false)
+            </div>
+        </div>
+    </div>
+</div>

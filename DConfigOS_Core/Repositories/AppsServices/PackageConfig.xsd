@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PackageConfig"
+    elementFormDefault="qualified"
+    targetNamespace="http://tempuri.org/PackageConfig.xsd"
+    xmlns="http://tempuri.org/PackageConfig.xsd"
+    xmlns:mstns="http://tempuri.org/PackageConfig.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="packageConfig">
+    <xs:complexType mixed="1">
+      <xs:sequence minOccurs="1" maxOccurs="1">
+        <xs:element name="viewFieldsTypes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="viewFieldType">
+                <xs:complexType>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="intentName" type="xs:string" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="viewTypes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+              <xs:element name="viewType">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="1" minOccurs="0">
+                    <xs:element name="viewTypeFields">
+                      <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                          <xs:element name="viewTypeField">
+                            <xs:complexType>
+                              <xs:attribute  use="required" name="name" type="xs:string"></xs:attribute>
+                              <xs:attribute  use="required" name="type" type="xs:string"></xs:attribute>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="scripts" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="script">
+                <xs:complexType>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="path" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="priority" type="xs:integer" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="styles" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="style">
+                <xs:complexType>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="path" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="priority" type="xs:integer" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="templates" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="template">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="1" minOccurs="0">
+                    <!--Using the same templates complex type-->
+                  </xs:sequence>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="path" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="isActive" type="xs:boolean" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="contents" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="content">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="1" minOccurs="0">
+                    <!--Using the same contents complex type-->
+                    <xs:element name="contentsInstances">
+                      <xs:complexType>
+                        <xs:sequence maxOccurs="1" minOccurs="0">
+                          <xs:element name ="fields">
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="unbounded">
+                                <xs:element name="field">
+                                  <xs:complexType>
+                                    <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                                    <xs:attribute use="required" name="value" type="xs:string" ></xs:attribute>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="title" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="online" type="xs:boolean" ></xs:attribute>
+                        <xs:attribute use="required" name="language" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="version" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="redirectUrl" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="downloadPath" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="downloadName" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="metaDescription" type="xs:string" ></xs:attribute>
+                        <xs:attribute use="required" name="metaKeywords" type="xs:string" ></xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute use="required" name="name" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="viewType" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="online" type="xs:boolean" ></xs:attribute>
+                  <xs:attribute use="required" name="urlName" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="contentType" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="priority" type="xs:integer" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute use="optional" name="appName" type="xs:string" ></xs:attribute>
+      <xs:attribute use="required" name="packageName" type="xs:string" ></xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

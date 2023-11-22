@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema"
+    elementFormDefault="qualified"
+    xmlns="WebSiteConfigSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="sabConfig">
+    <xs:complexType mixed="1">
+      <xs:sequence minOccurs="1" maxOccurs="1">
+        <xs:element name="modules" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="module">
+                <xs:complexType>
+                  <xs:attribute use="required" name="namespace" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="path" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="configPath" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="viewsPath" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="optional" name="builtIn" type="xs:boolean" ></xs:attribute>
+                  <xs:attribute use="optional" name="override" type="xs:boolean" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="routes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="route">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0" maxOccurs="1">
+                    <xs:element name="defaults">
+                      <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded" minOccurs="0">
+                          <xs:element name="default">
+                            <xs:complexType>
+                              <xs:attribute use="required" name="key" type="xs:string"></xs:attribute>
+                              <xs:attribute use="required" name="value" type="xs:string"></xs:attribute>
+                              <xs:attribute use="optional" name="optional" type="xs:boolean"></xs:attribute>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute use="required" name="key" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="pattern" type="xs:string" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="settings" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded" minOccurs="0">
+              <xs:element name="settingsRecord">
+                <xs:complexType>
+                  <xs:attribute use="required" name="key" type="xs:string" ></xs:attribute>
+                  <xs:attribute use="required" name="value" type="xs:string" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

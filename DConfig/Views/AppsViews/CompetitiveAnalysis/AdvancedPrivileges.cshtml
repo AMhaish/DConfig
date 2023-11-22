@@ -1,0 +1,134 @@
+﻿@{
+    Layout = "~/Views/AppsViews/CompetitiveAnalysis/__SearchListLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" data-ng-model="searchText.Name" />
+    <a data-ng-click="createRootNode()"><i class="fa fa-plus"></i> New Privilege</a>
+}
+@section DetailsTopMenu{
+}
+@section SearchList{
+    <ul>
+        <li class="searchListItem" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.PrivilegeDetails)}" data-ng-repeat="p in Privileges | filter:searchText">
+            <a data-ng-click="displayDetails($index)">{{p.Company.Name}}</a><i class="fa fa-times extMenuChoice" data-ng-click="deletePrivilege($index)"></i>
+        </li>
+    </ul>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.PrivilegeDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Privilege Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="control-label">Related Brand Factory Type</label>
+                                <div class="form-group">
+                                    <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in BrandFactoryTypes">
+                                        <label>
+                                            <input type="checkbox" checklist-csv-model="currentObj.RelatedBrandFactoyTypes" checklist-value="v.Value" />
+                                            <span>{{v.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="control-label">Visible Sections</label>
+                                <div class="form-group">
+                                    <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in Sections">
+                                        <label>
+                                            <input type="checkbox" checklist-csv-model="currentObj.VisibleSections" checklist-value="v.Value" />
+                                            <span>{{v.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label class="control-label">Related Templates</label>
+                                <div class="form-group">
+                                    <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in Templates">
+                                        <label>
+                                            <input type="checkbox" checklist-model="currentObj.RelatedProdutTemplatesIds" checklist-value="v.Id" />
+                                            <span>{{v.Name}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="updatePrivilege()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Advanced Privileges</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createRootNode()">Create New Advanced Privilege</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Advanced Privilege</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <select class="form-control" name="factoryType" data-ng-model="newNode.CompanyId" ng-options="co.Id as co.Name for co in companies"></select>
+                        <label for="factoryType">Company</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Related Brand Factory Type</label>
+                        <div class="form-group">
+                            <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in BrandFactoryTypes">
+                                <label>
+                                    <input type="checkbox" checklist-csv-model="newNode.RelatedBrandFactoyTypes" checklist-value="v.Value" />
+                                    <span>{{v.Name}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="control-label">Visible Sections</label>
+                        <div class="form-group">
+                            <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in Sections">
+                                <label>
+                                    <input type="checkbox" checklist-csv-model="newNode.VisibleSections" checklist-value="v.Value" />
+                                    <span>{{v.Name}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="control-label">Related Templates</label>
+                        <div class="form-group">
+                            <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in Templates">
+                                <label>
+                                    <input type="checkbox" checklist-model="newNode.RelatedProdutTemplatesIds" checklist-value="v.Id" />
+                                    <span>{{v.Name}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

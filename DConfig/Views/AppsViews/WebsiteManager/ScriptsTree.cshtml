@@ -1,0 +1,168 @@
+﻿@using WebsiteManager.Properties
+@{
+    Layout = "~/Views/AppsViews/WebsiteManager/_WebsiteManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="scriptsSearchBox" id="scriptsSearchBox" />
+    <a data-ng-click="createRootNode()"><i class="fa fa-plus"></i> Add Bundle</a>
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None || currentNodeObject.type!='Item'">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptCode }" data-ng-click="displayCode()">Code</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+    </ul>
+
+    <ul data-ng-hide="state == DetailsPanelStates.None || currentNodeObject.type=='Item'">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptCode }" data-ng-click="uploadFile()"><i class="fa fa-plus"></i> Upload Files</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentsSorting }" data-ng-click="displaySortingPanel()">Scripts Sorting</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ScriptDetails }" data-ng-click="displayGeneralDetails()">General</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="scriptsTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ScriptDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Script Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="name" data-ng-model="currentObj.Name" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="codeForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ScriptCode">
+            <div class="modal-header">
+                <h3 class="modal-title">Script Code</h3>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <pre id="codeTextArea" class="codeEditor">
+                    </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveCode()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Scripts</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createRootNode()">Create New Scripts Bundle</a>
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+        <div id="contentsSortingForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ContentsSorting">
+            <div class="modal-header">
+                <h3 class="modal-title">Sorting Contents</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" data-ui-sortable="SortableOptions" data-ng-model="sortingContents">
+                    <li class="list-group-item" data-ng-repeat="cc in sortingContents"><div class="handle">{{cc.Name}}<i class="pull-right glyphicon fa fa-arrows"></i></div></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveContentsSorting()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Styles Bundle</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newNode.Name" value="" placeholder="Name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+    <div>
+        <script type="text/ng-template" id="uploadForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload new files</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate class="form">
+                    <input name="Path" type="hidden" value="{{newFile.Path}}" />
+                    <div class="textField">File</div>
+                    @*<div data-uploader="" data-destination-object="newFile" data-property-name="FilePath" data-action="/DConfig/IOServicesAPI/createFile" data-finish-handler="ok()"></div>*@
+
+                    <div ng-file-drop ng-model="newFile.Files" class="drop-box"
+                         drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+                         data-multiple="true" data-allow-dir="true" data-accept="*">
+                        You can drop Images files here to upload them
+                    </div>
+                    <button class="uploadButton" data-ng-file-select data-ng-model="newFile.Files" data-multiple="true" class="btn btn-default">Or click here to browse and upload</button>
+                    <div data-ng-no-file-drop>File Farg/Drop is not supported for this browser</div>
+                    <progressbar animate="true" value="progress" type="success"></progressbar>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

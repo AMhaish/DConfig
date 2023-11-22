@@ -1,0 +1,23 @@
+﻿<div class="register">
+    <table>
+        <tr>
+            <td colspan="2"><input type="text" name="User" value="" placeholder="User Name" [(ngModel)]="user.userName" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="text" name="User" value="" placeholder="Email" [(ngModel)]="user.email" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="password" name="Password" value="" placeholder="Password" [(ngModel)]="user.password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="password" name="ConfirmPassword" value="" placeholder="Confirm Password" [(ngModel)]="user.confirmPassword" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="submitButton">
+                <input type="button" value="Back to Login" class="btn btn-default" (click)="goToLoginPage()" />
+                <input type="submit" value="Register" class="btn btn-primary" (click)="doRegister()" />
+            </td>
+        </tr>
+    </table>
+</div>

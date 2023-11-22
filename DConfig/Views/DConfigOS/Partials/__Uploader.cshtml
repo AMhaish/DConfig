@@ -1,0 +1,23 @@
+﻿<div class="uploader">
+	<!-- the real input[type=file] is hidden -->
+    <input type="file" name="UploadedFile" style="display:none;" id="uploader" onchange="angular.element(this).scope().setFileName(this)"/>
+		 @*onchange="angular.element(this).scope().sendFile(this);"*@
+
+	<!-- input field, used to open the real input[type=file]  -->
+	<div class="valueFiled">
+        <input type="text" readonly="readonly" data-ng-model="fileName" class="fake-uploader" />
+        <input type="button" onclick="angular.element(this).scope().chooseFile()" value="Choose File" class="btn btn-default" />
+        <input type="button" onclick="angular.element(this).scope().sendFile()" value="Upload" class="btn btn-primary" />
+	</div>
+
+	<!-- progress bar -->
+	@*<div class="progress" data-ng-show="progress!=0">
+		<div class="bar" style="width:{{progress}}%;"></div>
+	</div>*@
+    <progressbar animate="true" value="progress" type="success"><b>{{progress}}%</b></progressbar>
+</div>
+
+<!-- preview -->
+@*<div data-ng-if="avatar != ''" style="margin: 10px 0 0;height:320px;width:320px;overflow:auto;">
+	<img data-ng-src="/UploadedFiles/{{avatar}}"/ style="height:320px;width:320px;">
+</div>*@

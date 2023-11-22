@@ -1,0 +1,1127 @@
+﻿@{
+    Layout = "~/Views/AppsViews/CompetitiveAnalysis/__FilterListLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <form name="searchForm" class="form" novalidate>
+        <div class="addBtnCon">
+            <button type="button" class="btn addBtn ink-reaction btn-lg btn-accent" data-ng-click="importProductsImages()"><i class="fa fa-file-image-o"></i></button>
+            <button type="button" class="btn addBtn ink-reaction btn-lg btn-accent" data-ng-click="importProducts()"><i class="fa fa-upload"></i></button>
+            <button type="button" class="btn addBtn ink-reaction btn-lg btn-accent" data-ng-click="createNode()"><i class="fa fa-plus"></i></button>
+        </div>
+        <div>
+            <h3>Quick Search</h3>
+        </div>
+        <div class="form-group">
+            <select class="form-control" name="type" data-ng-model="currentTemplate" ng-options="v as v.Name for v in templates" data-ng-change="clearProductsList()">
+                <option value=""></option>
+            </select>
+            <label for="type">Choose Products Type</label>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-content">
+                    <input class="form-control" type="text" name="contentSearchBox" id="contentSearchBox" data-ng-model="productPattern" data-ng-keyup="loadProducts()" />
+                    <label for="contentSearchBox">Search Products</label>
+                </div>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" type="button" data-ng-click="advancedSearch()" tabindex="-1"><i class="fa fa-filter"></i></button>
+                    <button class="btn btn-primary" tabindex="-1" type="button" data-ng-click="displayRecentProducts()"><i class="fa fa-history"></i></button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a data-ng-click="loadProducts('*')"> Show all products</a>
+            <a data-ng-click="clearProductsList()" style="float:right;"><i class="fa fa-times"></i> Clear List</a>
+        </div>
+    </form>
+
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.Share }" data-ng-click="displaySharePanel()">Share</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ProductPrices }" data-ng-click="displayPrices()">Prices & Updates</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ProductProperties }" data-ng-click="displayProporties()">Edit Properties</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ProductDetails }" data-ng-click="displayGeneralDetails()">Product Details</a></li>
+        @*@if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges != null && CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.VisibleSections.Contains("Share")))
+            {
+
+            }
+                @if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges != null && CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.VisibleSections.Contains("Prices")))
+                {
+
+                }
+                @if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges != null && CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.VisibleSections.Contains("Edit Properties")))
+                {
+
+                }*@
+
+    </ul>
+}
+@section SearchList{
+    @*<div id="productsTree">
+        </div>*@
+    <div id="productsList">
+        <ul>
+            <li class="searchListItem" data-ng-repeat="product in Products" data-ng-class="{ active: $index == selectedIndex && (state == DetailsPanelStates.ProductDetails || state == DetailsPanelStates.ProductProperties || state == DetailsPanelStates.ProductPrices || state==DetailsPanelStates.Share)}">
+                <a data-ng-click="displayDetails($index)">{{product.Name}}</a><i class="fa fa-times extMenuChoice" data-ng-click="deleteProduct($index)"></i><i class="fa fa-files-o extMenuChoice" data-ng-click="cloneProduct($index)"></i>
+            </li>
+        </ul>
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="contentDetailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ProductDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Product Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="row">
+                        <div class="card col-md-6">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="name" data-ng-model="currentObj.Name" value="" required data-ng-minlength="2" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                        <small class="error"
+                                               ng-show="detialsForm.name.$error.required">
+                                            Name is required.
+                                        </small>
+                                        <small class="error"
+                                               ng-show="detialsForm.name.$error.minlength">
+                                            Name is required to be at least 2 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="detialsForm.name.$error.maxlength">
+                                            Name cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="name">Name</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="code" data-ng-model="currentObj.Code" value="" required data-ng-minlength="2" data-ng-maxlength="100" />
+                                    <label for="code">Code</label>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" name="factoryType" data-ng-model="currentObj.BrandFactoryType" @*ng-options="type.Value as type.Name for type in BrandFactoryTypes"*@>
+                                        <option value="Own">Own</option>
+                                        <option value="Supplier">Supplier</option>
+                                        <option value="Supplier">Supplier</option>
+                                        <option value="Competitor">Competitor</option>
+                                        @*@if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges != null)
+                                            {
+                                                if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.RelatedBrandFactoyTypes.Contains("Own")))
+                                                {
+                                                    <option value="Own">Own</option>
+                                                }
+                                                if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.RelatedBrandFactoyTypes.Contains("Supplier")))
+                                                {
+                                                    <option value="Supplier">Supplier</option>
+                                                }
+                                                if (CompetitiveAnalysis.Actions.AppBaseAction.UserAdvancedPrivileges.Any(m => m.RelatedBrandFactoyTypes.Contains("Competitor")))
+                                                {
+                                                    <option value="Competitor">Competitor</option>
+                                                }
+                                            }*@
+                                    </select>
+                                    <label for="factoryType">Brand Factory Type</label>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="notes" data-ng-model="currentObj.Notes" value="" data-ng-maxlength="512" />
+                                    <span class="error-container"
+                                          ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                        <small class="error"
+                                               ng-show="detialsForm.name.$error.maxlength">
+                                            Notes cannot be longer than 512 characters
+                                        </small>
+                                    </span>
+                                    <label for="notes">Notes</label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <select class="form-control" name="brandType" data-ng-model="currentObj.CompanyId" ng-options="company.Id as company.Name for company in Companies">
+                                                <option value=""></option>
+                                            </select>
+                                            <label for="brandType">Brand</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <input type="button" value="Update Info" class="btn btn-primary" data-ng-click="saveChanges()" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input class="form-control" type="text" name="tags" data-tagsinput="" data-ng-model="currentObj.TagsString" />
+                                            <label for="tags">Tags</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <input type="button" value="Update Tags" class="btn btn-primary" data-ng-click="saveTags()" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <table>
+                                    <tr>
+                                        <td style="width:50%;">
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" name="createDate" data-ng-model="currentObj.CreateDate_Short" value="" readonly="readonly" />
+                                                <label for="createDate">Create Date</label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" name="updateDate" data-ng-model="currentObj.UpdateDate_Short" value="" readonly="readonly" />
+                                                <label for="updateDate">Last Update Date</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card card-bordered style-accent-dark">
+                                <div class="card-head card-head-xs style-accent-dark"><header>Highlights</header></div>
+                                <div class="card-body style-default-bright">
+                                    <div data-ng-repeat="(name, props) in parentObject.HighlightsGroups">
+                                        <div data-ng-repeat="prop in props">
+                                            <div class="textField">
+                                                {{prop.DisplayAs}}<span data-ng-hide="prop.DisplayAs==undefined">:</span>
+                                                <span data-ng-switch data-on="prop.Type">
+                                                    <span data-ng-switch-when="Image">
+                                                        <img src="{{prop.Value}}" style="max-height:100px;max-width:100px;cursor:pointer" data-ng-click="showImage(prop.Value)" />
+                                                    </span>
+                                                    <span data-ng-switch-when="Multiple Images">
+                                                        <span ng-repeat="s in prop.Value.split(',') track by $index">
+                                                            <img src="{{s}}" style="max-height:100px;max-width:100px;cursor:pointer" data-ng-click="showImage(s)" />
+                                                        </span>
+                                                    </span>
+                                                    <span data-ng-switch-when="String - Multiple Lines">
+                                                        {{prop.Value}}
+                                                    </span>
+                                                    <span data-ng-switch-when="Boolean">
+                                                        <span data-ng-switch="prop.Value">
+                                                            <span data-ng-switch-when="True">Yes</span>
+                                                            <span data-ng-switch-when="False">No</span>
+                                                            <span data-ng-switch-default="">Not Set</span>
+                                                        </span>
+                                                    </span>
+                                                    <span data-ng-switch-default="">
+                                                        <strong>{{prop.Value}} {{prop.Unit}}</strong>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                    <div>
+                                        <div class="textField">
+                                            SSR Price:
+                                            <span data-ng-repeat="price in currentObj.SSRPPrices">
+                                                <span>
+                                                    <strong>{{price.PriceValue}} {{price.Currency}}</strong>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="textField" data-ng-hide="currentObj.BrandFactoryType=='Supplier'">
+                                            Current Price:
+                                            <span data-ng-if="currentObj.NORMPrices.length > 0">
+                                                <span>
+                                                    <strong>{{currentObj.NORMPrices[0].PriceValue}} {{currentObj.NORMPrices[0].Currency}}</strong>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div data-ng-hide="currentObj.BrandFactoryType=='Competitor'">
+                                            <div class="textField" data-ng-repeat="p in currentObj.QTYLastPrices">
+                                                ({{p.from}}-{{p.to}}) Price:
+                                                <span>
+                                                    <strong>{{p.price.PriceValue}} {{p.price.Currency}}</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div ng-repeat-start="p in parentObject.PropertiesGroups" class="col-md-4">
+                            <div class="card card-bordered style-primary">
+                                <div class="card-head card-head-xs style-primary"><header>{{p.DisplayAs}}</header></div>
+                                <div class="card-body style-default-bright">
+                                    <div data-ng-repeat="prop in p.Properties" data-ng-hide="prop.InvisibileToFactoryTypes.contains(currentObj.BrandFactoryType)">
+                                        <div class="textField">
+                                            {{prop.DisplayAs}}<span data-ng-hide="prop.DisplayAs==undefined">:</span>
+                                            <span data-ng-switch data-on="prop.Type">
+                                                <span data-ng-switch-when="Image">
+                                                    <img src="{{prop.Value}}" style="max-height:100px;max-width:100px;cursor:pointer" data-ng-click="showImage(prop.Value)" />
+                                                </span>
+                                                <span data-ng-switch-when="Multiple Images">
+                                                    <span ng-repeat="s in prop.Value.split(',') track by $index">
+                                                        <img src="{{s}}" style="max-height:100px;max-width:100px;cursor:pointer" data-ng-click="showImage(s)" />
+                                                    </span>
+                                                </span>
+                                                <span data-ng-switch-when="String - Multiple Lines">
+                                                    {{prop.Value}}
+                                                </span>
+                                                <span data-ng-switch-when="Boolean">
+                                                    <span data-ng-switch="prop.Value">
+                                                        <span data-ng-switch-when="True">Yes</span>
+                                                        <span data-ng-switch-when="False">No</span>
+                                                        <span data-ng-switch-default="">Not Set</span>
+                                                    </span>
+                                                </span>
+                                                <span data-ng-switch-default="">
+                                                    <strong>{{prop.Value}} {{prop.Unit}}</strong>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-repeat-end="" data-ng-class="{clearfix:($index+1)%3==0}" class="hidden-sm">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="contentInstanceProportiesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ProductProperties">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Properties</h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="PropertiesAcc">
+                    <div class="card panel" data-ng-repeat="p in parentObject.PropertiesGroups">
+                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#PropertiesAcc" data-target="#Property{{$index}}">
+                            <header>{{p.DisplayAs}}</header>
+                            <div class="tools">
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-angle-down"></i>
+                                </a>
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-times" data-ng-click="removePrice($index)"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="Property{{$index}}" class="collapse">
+                            <div class="card-body">
+                                <form name="fieldForm{{$index}}" class="form" novalidate>
+                                    <div class="property" data-ng-repeat="prop in p.Properties" data-ng-hide="prop.InvisibileToFactoryTypes.contains(currentObj.BrandFactoryType)">
+                                        <div data-ng-switch data-on="prop.Type">
+                                            <div class="form-group" data-ng-switch-when="String">
+                                                <input name="{{prop.Name}}" class="form-control" type="text" data-ng-model="prop.Value" value="" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="String - Multiple Lines">
+                                                <textarea name="{{prop.Name}}" class="form-control" data-ng-model="prop.Value" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Rich Text Box">
+                                                <textarea class="form-control" name="{{prop.Name}}" ck-editor="" data-ng-model="prop.Value" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Simple Rich Text Box">
+                                                <textarea class="form-control" name="{{prop.Name}}" data-ck-editor="" data-ng-model="prop.Value" data-ck-type="Simple" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Date">
+                                                <input name="{{prop.Name}}" class="form-control" type="text" data-ng-model="prop.Value" value="" date-picker="" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Predefined List">
+                                                <select name="{{prop.Name}}" class="form-control" data-ng-model="prop.Value" ng-options="vt.Value as vt.Value for vt in prop.Enum.OrderedValues"></select>
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Predefined List - Checkboxes">
+                                                <label class="control-label">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                                <div class="sub-form-group">
+                                                    <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in prop.Enum.OrderedValues">
+                                                        <label>
+                                                            <input type="checkbox" checklist-csv-model="prop.Value" checklist-value="v.Value" />
+                                                            <span>{{v.Value}}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Predefined List - Radio Buttons">
+                                                <label class="control-label">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                                <div class="sub-form-group">
+                                                    <div class="radio-inline radio-styled col-md-4 col-lg-3" data-ng-repeat="v in prop.Enum.OrderedValues">
+                                                        <label>
+                                                            <input type="radio" data-ng-model="prop.Value" data-ng-value="v.Value" />
+                                                            <span>{{v.Value}}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Predefined List - Filter/Select">
+                                                <input name="{{prop.Name}}" class="form-control" data-filter-select-list="" type="text" data-ng-model="prop.Value" data-typeahead="v.Value for v in prop.Enum.OrderedValues | filter:$viewValue | limitTo:8">
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}} (The value will be appedned to the list if it wasn't found in it)</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Content Url">
+                                                <div class="input-group">
+                                                    <div class="input-group-content">
+                                                        <input name="{{prop.Name}}" class="form-control" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" readonly="readonly" />
+                                                        <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                                    </div>
+                                                    <div class="input-group-btn">
+                                                        <input type="button" value="Select" class="btn btn-default" data-ng-click="runContentSelector($index)" />
+                                                        <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Boolean">
+                                                <label class="control-label">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                                <div class="sub-form-group">
+                                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                                        <label>
+                                                            <input type="radio" data-ng-model="prop.Value" value="True" />
+                                                            <span>True</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                                        <label>
+                                                            <input type="radio" data-ng-model="prop.Value" value="False" />
+                                                            <span>False</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-when="Number">
+                                                <input name="{{prop.Name}}" class="form-control" type="text" data-ng-model="prop.Value" value="" placeholder="{{prop.Name}}" />
+                                                <label for="{{prop.Name}}">{{prop.Name}} {{prop.Unit}} {{prop.Notes}}</label>
+                                            </div>
+                                            <div class="form-group" data-ng-switch-default>
+                                                <div class="input-group">
+                                                    <div class="input-group-content">
+                                                        <input name="{{prop.Name}}" class="form-control" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" readonly="readonly" />
+                                                        <label for="{{prop.Name}}">{{prop.Name}} {{prop.Notes}}</label>
+                                                    </div>
+                                                    <div class="input-group-btn">
+                                                        <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelector($index,$parent.$parent.$index)" />
+                                                        <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index,$parent.$parent.$index)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div><!--end .panel -->
+                </div><!--end .panel-group -->
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveProperties()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+
+        <div id="pricesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ProductPrices">
+            <div class="modal-header">
+                <h4 class="modal-title">Prices</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Suggested retail price: <a data-ng-click="addNewPrice('SSRP')" class="fa fa-plus-circle" data-ng-hide="currentObj.SSRPPrices.length > 0"></a></h4>
+                <div class="panel-group" id="PricesAcc">
+                    <div class="card panel" data-ng-repeat="field in currentObj.SSRPPrices">
+                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#PricesAcc" data-target="#SSRPPrice{{$index}}">
+                            <header>{{field.PriceValue}} <span data-ng-if="field.PriceValue!=''">{{field.Currency}}</span> <span data-ng-if="field.PriceValue!='' && field.PriceDate!=''">-</span> {{field.PriceDate | date:'MM/dd/yyyy'}}</header>
+                            <div class="tools">
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-angle-down"></i>
+                                </a>
+                                <a class="btn btn-icon-toggle">
+                                    <i class="glyphicon fa fa-times" data-ng-click="removePrice($index,'SSRP')"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="SSRPPrice{{$index}}" class="collapse">
+                            <div class="card-body">
+                                <form name="fieldForm{{$index}}" class="form" novalidate>
+                                    <div class="form-group">
+                                        <input class="form-control" name="price" type="text" data-ng-model="field.PriceValue" value="" />
+                                        <label for="price">Price</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Currency</label>
+                                        <div class="form-group">
+                                            <div class="radio-inline radio-styled  col-md-4 col-lg-3" data-ng-repeat="v in Currencies">
+                                                <label>
+                                                    <input type="radio" data-ng-model="field.Currency" data-ng-value="v" />
+                                                    <span>{{v}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" name="priceDate" type="text" data-ng-model="field.PriceDate" date-picker="" />
+                                        <label for="priceDate">Price Date</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="reference" data-ng-model="field.Reference" data-ng-minlength="3" data-ng-maxlength="500" />
+                                        <span class="error-container"
+                                              ng-show="fieldForm{{$index}}.reference.$dirty && fieldForm{{$index}}.reference.$invalid">
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.reference.$error.minlength">
+                                                Field name is required to be at least 3 characters
+                                            </small>
+                                            <small class="error"
+                                                   ng-show="fieldForm{{$index}}.reference.$error.maxlength">
+                                                Field name cannot be longer than 500 characters
+                                            </small>
+                                        </span>
+                                        <label for="reference">Reference</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<input type="button" value="Add SSRP Price" class="btn btn-success" data-ng-click="addNewPrice('SSRP')" />*@
+                <div data-ng-hide="currentObj.BrandFactoryType=='Supplier'">
+                    <h4>Current Prices: <a data-ng-click="addNewPrice('NORM')" class="fa fa-plus-circle"></a></h4>
+                    <div class="panel-group" id="PricesAcc2">
+                        <div class="card panel" data-ng-repeat="field in currentObj.NORMPrices">
+                            <div class="card-head collapsed" data-toggle="collapse" data-parent="#PricesAcc2" data-target="#NORMPrice{{$index}}">
+                                <header>{{field.PriceValue}} <span data-ng-if="field.PriceValue!=''">{{field.Currency}}</span> <span data-ng-if="field.PriceValue!='' && field.PriceDate!=''">-</span> {{field.PriceDate | date:'MM/dd/yyyy'}}</header>
+                                <div class="tools">
+                                    <a class="btn btn-icon-toggle">
+                                        <i class="glyphicon fa fa-angle-down"></i>
+                                    </a>
+                                    <a class="btn btn-icon-toggle">
+                                        <i class="glyphicon fa fa-times" data-ng-click="removePrice($index,'NORM')"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="NORMPrice{{$index}}" class="collapse">
+                                <div class="card-body">
+                                    <form name="fieldForm{{$index}}" class="form" novalidate>
+                                        <div class="form-group">
+                                            <input class="form-control" name="price" type="text" data-ng-model="field.PriceValue" value="" />
+                                            <label for="price">Price</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Currency</label>
+                                            <div class="form-group">
+                                                <div class="radio-inline radio-styled  col-md-4 col-lg-3" data-ng-repeat="v in Currencies">
+                                                    <label>
+                                                        <input type="radio" data-ng-model="field.Currency" data-ng-value="v" />
+                                                        <span>{{v}}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" name="priceDate" type="text" data-ng-model="field.PriceDate" date-picker="" />
+                                            <label for="priceDate">Price Date</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="reference" data-ng-model="field.Reference" data-ng-minlength="3" data-ng-maxlength="500" />
+                                            <span class="error-container"
+                                                  ng-show="fieldForm{{$index}}.reference.$dirty && fieldForm{{$index}}.reference.$invalid">
+                                                <small class="error"
+                                                       ng-show="fieldForm{{$index}}.reference.$error.minlength">
+                                                    Field name is required to be at least 3 characters
+                                                </small>
+                                                <small class="error"
+                                                       ng-show="fieldForm{{$index}}.reference.$error.maxlength">
+                                                    Field name cannot be longer than 500 characters
+                                                </small>
+                                            </span>
+                                            <label for="reference">Reference</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<input type="button" value="Add Normal Price" class="btn btn-success" data-ng-click="addNewPrice('NORM')" />*@
+                <div data-ng-hide="currentObj.BrandFactoryType=='Competitor'">
+                    <h4>Quantity Prices: <a data-ng-click="addNewPrice('QTY')" class="fa fa-plus-circle"></a></h4>
+                    <div class="panel-group" id="PricesAcc3">
+                        <div class="card panel" data-ng-repeat="field in currentObj.QTYPrices">
+                            <div class="card-head collapsed" data-toggle="collapse" data-parent="#PricesAcc3" data-target="#QTYPrice{{$index}}">
+                                <header>QTY: {{field.QuantityFrom}}-{{field.QuantityTo}} {{field.PriceValue}} <span data-ng-if="field.PriceValue!=''">{{field.Currency}}</span> <span data-ng-if="field.PriceValue!='' && field.PriceDate!='' ">-</span> {{field.PriceDate | date:'MM/dd/yyyy'}}</header>
+                                <div class="tools">
+                                    <a class="btn btn-icon-toggle">
+                                        <i class="glyphicon fa fa-angle-down"></i>
+                                    </a>
+                                    <a class="btn btn-icon-toggle">
+                                        <i class="glyphicon fa fa-times" data-ng-click="removePrice($index,'QTY')"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="QTYPrice{{$index}}" class="collapse">
+                                <div class="card-body">
+                                    <form name="fieldForm{{$index}}" class="form" novalidate>
+                                        <div class="form-group">
+                                            <input class="form-control" name="price" type="text" data-ng-model="field.PriceValue" value="" />
+                                            <label for="price">Price</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Currency</label>
+                                            <div class="form-group">
+                                                <div class="radio-inline radio-styled  col-md-4 col-lg-3" data-ng-repeat="v in Currencies">
+                                                    <label>
+                                                        <input type="radio" data-ng-model="field.Currency" data-ng-value="v" />
+                                                        <span>{{v}}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" name="priceDate" type="text" data-ng-model="field.PriceDate" date-picker="" />
+                                            <label for="priceDate">Price Date</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-content">
+                                                    <input class="form-control" type="text" name="start" data-ng-model="field.QuantityFrom" required>
+                                                    <span class="error-container"
+                                                          ng-show="fieldForm{{$index}}.start.$dirty && fieldForm{{$index}}.start.$invalid">
+                                                        <small class="error"
+                                                               ng-show="fieldForm{{$index}}.start.$error.minlength">
+                                                            Quantity from is a required field
+                                                        </small>
+                                                    </span>
+                                                    <label>Quantity</label>
+                                                </div>
+                                                <span class="input-group-addon">to</span>
+                                                <div class="input-group-content">
+                                                    <input class="form-control" type="text" name="end" data-ng-model="field.QuantityTo" required>
+                                                    <span class="error-container"
+                                                          ng-show="fieldForm{{$index}}.end.$dirty && fieldForm{{$index}}.end.$invalid">
+                                                        <small class="error"
+                                                               ng-show="fieldForm{{$index}}.end.$error.minlength">
+                                                            Quantity to is a required field
+                                                        </small>
+                                                    </span>
+                                                    <div class="form-control-line"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="reference" data-ng-model="field.Reference" data-ng-minlength="3" data-ng-maxlength="500" />
+                                            <span class="error-container"
+                                                  ng-show="fieldForm{{$index}}.reference.$dirty && fieldForm{{$index}}.reference.$invalid">
+                                                <small class="error"
+                                                       ng-show="fieldForm{{$index}}.reference.$error.minlength">
+                                                    Field name is required to be at least 3 characters
+                                                </small>
+                                                <small class="error"
+                                                       ng-show="fieldForm{{$index}}.reference.$error.maxlength">
+                                                    Field name cannot be longer than 500 characters
+                                                </small>
+                                            </span>
+                                            <label for="reference">Reference</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<input type="button" value="Add Quantity Price" class="btn btn-success" data-ng-click="addNewPrice('QTY')" />*@
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="savePrices()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="shareForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Share">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Share Product</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="row card">
+                        <div class="card-head"><header>Embed</header></div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-content">
+                                        <input class="form-control" type="text" id="embedPath" name="embedPath" data-ng-model="Embed.Path" value="" readonly="readonly" />
+                                        <label for="embedPath">iframe code</label>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <input type="button" value="Select Code" class="btn btn-primary" data-ng-click="selectEmbedCode()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-content">
+                                        <input class="form-control" type="text" id="embedPurePath" name="embedPurePath" data-ng-model="Embed.PurePath" value="" readonly="readonly" />
+                                        <label for="embedPath">Code</label>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <input type="button" value="Select Code" class="btn btn-primary" data-ng-click="selectEmbedPureCode()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Embed Styles</label>
+                                <div class="form-group">
+                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                        <label>
+                                            <input type="radio" data-ng-model="Embed.Style" value="Simple" />
+                                            <span>Simple</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                        <label>
+                                            <input type="radio" data-ng-model="Embed.Style" value="Blocks" />
+                                            <span>Blocks</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                        <label>
+                                            <input type="radio" data-ng-model="Embed.Style" value="Accordions" />
+                                            <span>Accordions</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                        <label>
+                                            <input type="radio" data-ng-model="Embed.Style" value="List" />
+                                            <span>List</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input class="form-control" name="width" type="text" data-ng-model="Embed.Width" value="" />
+                                            <label for="width">Width</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input class="form-control" name="height" type="text" data-ng-model="Embed.Height" value="" />
+                                            <label for="height">Height</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input class="form-control" name="border" type="text" data-ng-model="Embed.Border" value="" />
+                                            <label for="border">Border</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h4 class="control-label">Needed Properties</h4>
+                            <div data-ng-repeat="p in parentObject.PropertiesGroups" class="col-md-2">
+                                <div class="card card-outlined style-primary">
+                                    <div class="card-head"><header>{{p.Name}}</header></div>
+                                    <div class="card-body">
+                                        <div data-ng-repeat="prop in p.Properties">
+                                            <div class="checkbox checkbox-styled">
+                                                <label>
+                                                    <input name="online" type="checkbox" checklist-csv-model="Embed.Properties" checklist-value="prop.Id.toString()" ng-disabled="prop.Value==''" />
+                                                    <span>{{prop.Name}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Products</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Product</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <select class="form-control" name="type" data-ng-model="newNode.TemplateId" ng-options="v.Id as v.Name for v in templates">
+                            <option value=""></option>
+                        </select>
+                        <label for="type">Choose Products Type</label>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newNode.Name" value="" required data-ng-minlength="2" data-ng-maxlength="100" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 2 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="code" data-ng-model="newNode.Code" value="" required data-ng-minlength="2" data-ng-maxlength="100" />
+                        <label for="code">Code</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="brand" data-ng-model="newNode.BrandFactoryType" ng-options="type.Value as type.Name for type in BrandFactoryTypes"></select>
+                        <label for="brand">Brand Factory Type</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="brandType" data-ng-model="newNode.CompanyId" ng-options="company.Id as company.Name for company in Companies">
+                            <option value=""></option>
+                        </select>
+                        <label for="brandType">Brand</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script id="importForm.html" type="text/ng-template">
+            <div class="modal-header">
+                <h3 class="modal-title">Import Products</h3>
+            </div>
+            <div class="modal-body">
+                <form name="importForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <select class="form-control" name="type" data-ng-model="newNode.TemplateId" ng-options="v.Id as v.Name for v in templates">
+                            <option value=""></option>
+                        </select>
+                        <label for="type">Choose Products Type</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="brand" data-ng-model="newNode.BrandFactoryType" ng-options="type.Value as type.Name for type in BrandFactoryTypes"></select>
+                        <label for="brand">Brand Factory Type</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="brandType" data-ng-model="newNode.CompanyId" ng-options="company.Id as company.Name for company in Companies">
+                            <option value=""></option>
+                        </select>
+                        <label for="brandType">Brand</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-content">
+                                <input class="form-control" name="excelPath" id="excelPath" type="text" data-ng-model="newNode.ExcelPath" value="" readonly="readonly" />
+                                <label for="excelPath">Excel file path</label>
+                            </div>
+                            <div class="input-group-btn">
+                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelector()" />
+                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField()" />
+                            </div>
+                        </div>
+                        <div>(Products names should be under "Name" column, products codes should be under "Code" column, prices should be under "Price" column, other columns is defined according to properties)</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script id="importImagesForm.html" type="text/ng-template">
+            <div class="modal-header">
+                <h3 class="modal-title">Import Products Images</h3>
+            </div>
+            <div class="modal-body">
+                <form name="importForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-content">
+                                <input class="form-control" name="excelPath" id="zipPath" type="text" data-ng-model="newNode.ZipPath" value="" readonly="readonly" />
+                                <label for="zipPath">Zip file path</label>
+                            </div>
+                            <div class="input-group-btn">
+                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelector()" />
+                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField()" />
+                            </div>
+                        </div>
+                        <div>(The files name should be like productId_main if main image or product Id_(any stuff) if the image for multiple images property)</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script id="importReportForm.html" type="text/ng-template">
+            <div class="modal-header">
+                <h3 class="modal-title">Import Products Report</h3>
+            </div>
+            <div class="modal-body">
+                <form name="importForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" name="importedProducts" type="text" data-ng-model="Report.ImportedCount" value="" readonly="readonly" />
+                        <label for="importedProducts">Number of imported products</label>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="failedProductsCount" type="text" data-ng-model="Report.FailedCount" value="" readonly="readonly" />
+                        <label for="failedProductsCount">Number of failed products</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="messages" data-ng-model="Report.Messages" value="" readonly="readonly" />
+                        <label for="messages">Failure messages</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+            </div>
+        </script>
+        <script type="text/ng-template" id="AdvancedSearch.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Advanced Search</h3>
+            </div>
+            <div class="modal-body" data-ng-init="initialize()">
+                <form class="form" novalidate>
+                    <table style="width:800px;">
+                        <tr>
+                            <td colspan="2">
+                                <div class="panel-group" id="MainFilterFields">
+                                    <div class="card panel">
+                                        <div class="card-head collapsed" data-toggle="collapse" data-parent="#MainFilterFields" data-target="#MainFilterFiledsPnl">
+                                            <header>
+                                                <span data-ng-if="Selected.SelectedTemplate==null">--Choose Product Search Info--</span>{{Selected.SelectedTemplate.Name}} <span data-ng-if="Selected.BrandFactoryTypes!=''">- {{Selected.BrandFactoryTypes}}</span>   <span data-ng-if="Selected.Tags!=''">- (Tags: {{Selected.Tags}})</span>
+                                                <!--<span data-ng-if="Selected.CreateDateFrom!='' && Selected.CreateDateTo!=''">- Created from {{Selected.CreateDateFrom}} to {{Selected.CreateDateTo}}</span><span data-ng-if="Selected.UpdateDateFrom!='' && Selected.UpdateDateTo!=''">- Updated from {{Selected.UpdateDateFrom}} to {{Selected.UpdateDateTo}}</span>-->
+                                            </header>
+                                        </div>
+                                        <div id="MainFilterFiledsPnl" class="collapse">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <select name="type" class="form-control" data-ng-model="Selected.SelectedTemplateId" ng-options="v.Id as v.Name for v in templates"></select>
+                                                    <label for="type">Products Type</label>
+                                                </div>
+                                                <table>
+                                                    <tr>
+                                                        <td style="width:50%;">
+                                                            <div class="form-group">
+                                                                <div class="checkbox-inline checkbox-styled  col-md-4 col-lg-3" data-ng-repeat="v in BrandFactoryTypes">
+                                                                    or
+                                                                    <label>
+                                                                        <input type="checkbox" checklist-csv-model="Selected.BrandFactoryTypes" checklist-value="v.Value" />
+                                                                        <span>{{v.Name}}</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="tags" data-tagsinput="" data-ng-model="Selected.Tags" data-typeheadjs="typeheadjs_tags" />
+                                                                <label for="tags">Tags</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table>
+                                                    <tr>
+                                                        <td style="width:25%;">
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="createFrom" data-ng-model="Selected.CreateDateFrom" data-date-picker="" />
+                                                                <label for="createFrom">Create Date - From</label>
+                                                            </div>
+                                                        </td>
+                                                        <td style="width:25%;">
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="createTo" data-ng-model="Selected.CreateDateTo" data-date-picker="" />
+                                                                <label for="createTo">Create Date - To</label>
+                                                            </div>
+                                                        </td>
+                                                        <td style="width:25%;">
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="updateFrom" data-ng-model="Selected.UpdateDateFrom" data-date-picker="" />
+                                                                <label for="updateFrom">Update Date - From</label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <input class="form-control" type="text" name="updateTo" data-ng-model="Selected.UpdateDateTo" data-date-picker="" />
+                                                                <label for="updateTo">Update Date - To</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div><!--end .panel -->
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Meet all the next conditions: <a data-ng-click="addFilter()" class="fa fa-plus-circle" data-ng-disabled="LoadingProducts==true"></a></h4>
+                                <ul class="list-group">
+                                    <li data-ng-repeat="f in Filters" class="list-group-item" style="font-size:11px;">{{f.Text}} <i class="fa fa-times extMenuChoice" data-ng-click="removeFilter($index)"></i></li>
+                                </ul>
+                                <h4>Meet one of the next conditions: <a data-ng-click="addOrFilter()" class="fa fa-plus-circle" data-ng-disabled="LoadingProducts==true"></a></h4>
+                                <ul class="list-group">
+                                    <li data-ng-repeat="f in OrFilters" class="list-group-item" style="font-size:11px;">{{f.Text}} <i class="fa fa-times extMenuChoice" data-ng-click="removeOrFilter($index)"></i></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:62%;vertical-align:top;padding-right:20px;">
+                                <h3>Result Products:</h3>
+                                <table>
+                                    <tr>
+                                        <td style="width:38%;">
+                                            <div class="checkbox-inline checkbox-styled">
+                                                <label>
+                                                    <input type="checkbox" data-ng-model="allProductsCheckBox.checked" />
+                                                    <span>Select/Deselect All</span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" name="productsSearchBox" id="productsSearchBox" data-ng-model="productSearchText.Name">
+                                                <label for="productsSearchBox">Search Products</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <ul id="productsTree_productSelector" class="list-group" style="height:200px;overflow:auto;border:1px solid #ccc;">
+                                    <li data-ng-repeat="p in Products | orderBy:'BrandFactoryType':true | filter:productSearchText  | propertiesFilter:Filters:OrFilters" class="list-group-item">
+                                        <div class="checkbox-inline checkbox-styled">
+                                            <label>
+                                                <input type="checkbox" checklist-model="ProductsToCompare.arr" checklist-value="p" />
+                                                <span> {{p.Name}}</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <button type="button" class="btn btn-primary" data-ng-click="loadProducts()"><i class="fa fa-refresh"></i> Load Products</button>
+                            </td>
+                            <td style="vertical-align:top;width:38%;border-left:1px solid #ccc;padding-left:10px;overflow:auto">
+                                <div class="textField"><h3>Products To Edit</h3><br /></div>
+                                <div class="valueField" id="productsTree_productSelector">
+                                    <ul class="list-group" style="height: 250px; overflow: auto; border: 1px solid #ccc;">
+                                        <li data-ng-repeat="p in ProductsToCompare.arr" class="list-group-item">{{p.Name}} <i class="fa fa-times extMenuChoice" data-ng-click="removeProductFromCompare($index)"></i></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok(false)" value="Show Products">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="addFilter.html">
+            <div class="modal-header">
+                <h3 class="modal-title">New Filter</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <h3>Add Filters</h3><br />
+                    <div class="form-group">
+                        <select name="group" class="form-control" data-ng-model="Selected.SelectedGroup" ng-options="g as g.Name for g in Selected.SelectedTemplate.PropertiesGroups"></select>
+                        <label for="group">Properties Group</label>
+                    </div>
+                    <div class="form-group">
+                        <select name="property" class="form-control" data-ng-model="Selected.SelectedProperty" ng-options="p as p.Name for p in Selected.SelectedGroup.Properties"></select>
+                        <label for="property">Property</label>
+                    </div>
+                    <div data-ng-switch data-on="Selected.SelectedProperty.Type">
+                        <div class="form-group" data-ng-switch-when="String">
+                            <textarea class="form-control" data-ng-model="FilterValues.Values" placeholder="Put your filter keywords with a commas in between" style="max-width:175px" />
+                        </div>
+                        <div class="form-group" data-ng-switch-when="String - Multiple Lines">
+                            <textarea class="form-control" data-ng-model="FilterValues.Values" placeholder="Put your filter keywords with a commas in between" style="max-width:175px;" />
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Date">
+                            <input class="form-control" type="text" data-ng-model="FilterDateRange.from" value="" placeholder="From" date-picker="" />
+                            <input class="form-control" type="text" data-ng-model="FilterDateRange.to" value="" placeholder="To" date-picker="" />
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Predefined List">
+                            <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in Selected.SelectedProperty.Enum.OrderedValues">
+                                <label>
+                                    <input type="checkbox" checklist-csv-model="FilterValues.Values" checklist-value="v.Value" />
+                                    <span>{{v.Value}}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Predefined List - Checkboxes">
+                            <div class="checkbox-inline checkbox-styled  col-md-4 col-lg-3" data-ng-repeat="v in Selected.SelectedProperty.Enum.OrderedValues">
+                                <label>
+                                    <input type="checkbox" checklist-csv-model="FilterValues.Values" checklist-value="v.Value" />
+                                    <span>{{v.Value}}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Predefined List - Radio Buttons">
+                            <div class="checkbox-inline checkbox-styled  col-md-4 col-lg-3" data-ng-repeat="v in Selected.SelectedProperty.Enum.OrderedValues">
+                                <label>
+                                    <input type="checkbox" checklist-csv-model="FilterValues.Values" checklist-value="v.Value" />
+                                    <span>{{v.Value}}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Predefined List - Filter/Select">
+                            <input class="form-control" type="text" data-ng-model="FilterValues.Values" data-typeahead="v.Value for v in Selected.SelectedProperty.Enum.OrderedValues | filter:$viewValue | limitTo:8" class="form-control">
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Boolean">
+                            <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                <label>
+                                    <input type="radio" data-ng-model="FilterValues.Values" value="True" />
+                                    <span>True</span>
+                                </label>
+                            </div>
+                            <div class="radio-inline radio-styled  col-md-4 col-lg-3">
+                                <label>
+                                    <input type="radio" data-ng-model="FilterValues.Values" value="False" />
+                                    <span>False</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-switch-when="Number">
+                            @*<div range-slider="" min="FilterNumericBaseValues.min" max="FilterNumericBaseValues.max" model-min="FilterNumericalRange.min" model-max="FilterNumericalRange.max" step="FilterNumericalStep"></div>*@
+                            <input class="form-control" type="text" data-ng-model="FilterNumericalRange.min" value="" placeholder="Min" />
+                            <input class="form-control" type="text" data-ng-model="FilterNumericalRange.max" value="" placeholder="Max" />
+                        </div>
+                        <div class="form-group" data-ng-switch-default="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

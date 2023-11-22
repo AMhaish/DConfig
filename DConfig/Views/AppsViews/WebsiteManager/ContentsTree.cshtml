@@ -1,0 +1,592 @@
+﻿@using WebsiteManager.Properties
+@{
+    Layout = "~/Views/AppsViews/WebsiteManager/_WebsiteManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="contentSearchBox" id="contentSearchBox" />
+    <a data-ng-click="createRootNode()"><i class="fa fa-plus"></i> Add Content</a>
+
+}
+@section DetailsTopMenu{
+    <ul data-ng-hide="state == DetailsPanelStates.None || state == DetailsPanelStates.ContentDetails || state == DetailsPanelStates.ContentsSorting || state == DetailsPanelStates.Domains || state == DetailsPanelStates.ChildrenNodes">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceProporties }" data-ng-click="displayProporties()">Proporties</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentInstanceDetails }" data-ng-click="displayInstanceGeneralDetails()">General</a></li>
+    </ul>
+    <ul data-ng-hide="state == DetailsPanelStates.None || state == DetailsPanelStates.ContentInstanceProporties || state == DetailsPanelStates.ContentInstanceDetails">
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentsSorting }" data-ng-click="displaySortingPanel()">Contents Sorting</a></li>
+        <li data-ng-hide="currentNodeObject.parent!='#'"><a data-ng-class="{ active: state == DetailsPanelStates.Domains }" data-ng-click="linkingDomains()">Linking Domains</a></li>
+        <li data-ng-hide="currentObj.PlentyChildren!=true"><a data-ng-class="{ active: state == DetailsPanelStates.ChildrenNodes }" data-ng-click="displayChildrenNodes()">All Children</a></li>
+        <li><a data-ng-class="{ active: state == DetailsPanelStates.ContentDetails }" data-ng-click="displayContentGeneralDetails()">General</a></li>
+    </ul>
+}
+@section SearchList{
+    <div id="contentTree">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="contentDetailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ContentDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Content Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="name" data-ng-model="currentObj.Name" value="" required data-ng-minlength="2" data-ng-maxlength="150" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.minlength">
+                                        Name is required to be at least 2 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.maxlength">
+                                        Name cannot be longer than 150 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="id" data-ng-model="currentObj.Id" readonly="readonly" />
+                                <label for="id">ID</label>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" data-ng-model="currentObj.ViewTypeId" name="type" ng-options="v.Id as v.Name for v in currentObj.PossibleViewTypes" disabled="disabled">
+                                    <option value=""></option>
+                                </select>
+                                <label for="type">View Type</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="viewTypeId" data-ng-model="currentObj.ViewTypeId" readonly="readonly" />
+                                <label for="viewTypeId">View Type ID</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="urlName" data-ng-model="currentObj.UrlName" value="" placeholder="Url Name" data-ng-minlength="3" data-ng-maxlength="150" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.urlName.$dirty && detialsForm.urlName.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.urlName.$error.minlength">
+                                        Url name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.urlName.$error.maxlength">
+                                        Url name cannot be longer than 150 characters
+                                    </small>
+                                </span>
+                                <label for="urlName">Url Name</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input name="online" type="checkbox" data-ng-model="currentObj.Online" value="" />
+                                        <span>Online</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input class="form-control" name="plentyChildren" type="checkbox" data-ng-model="currentObj.PlentyChildren" value="" ng-change="CheckingChildsViewType()" />
+                                        <span>Activate sub contents in quick contents list (Changing this will cause the tree to been reinitialized)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <a href="{{currentObj.UrlFullCode}}" target="_blank">{{currentObj.UrlFullCode}}</a>
+                                <label for="fullUrl">Full Path</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="publicViewsPackage" type="text" data-ng-model="currentObj.PublicViewsPackage.Name" value="" readonly="readonly" />
+                                <label for="publicViewsPackage">Public Views Package</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="createDate" type="text" value="{{currentObj.CreateDate | date : 'longDate'}}" readonly="readonly" />
+                                <label for="createDate">Create Date</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="contentInstanceDetailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ContentInstanceDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Content Instance Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="instanceDetailsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="name" data-ng-model="currentObj.Name" value="" placeholder="Name" required data-ng-minlength="2" data-ng-maxlength="150" />
+                                <span class="error-container"
+                                      ng-show="instanceDetailsForm.name.$dirty && instanceDetailsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="instanceDetailsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="instanceDetailsForm.name.$error.minlength">
+                                        Name is required to be at least 2 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="instanceDetailsForm.name.$error.maxlength">
+                                        Name cannot be longer than 150 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="id" data-ng-model="currentObj.Id" readonly="readonly" />
+                                <label for="id">ID</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                        <input class="form-control" name="online" type="checkbox" data-ng-model="currentObj.Online" value="" />
+                                        <span>Online</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="language" data-ng-model="currentObj.Language" ng-options="lang.Value as lang.Name for lang in Languages">
+                                    <option value="">Default</option>
+                                </select>
+                                <label for="language">Language</label>
+                            </div>
+                            <div data-ng-hide="parentObject.ContentType != 'Page'">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="title" data-ng-model="currentObj.Title" value="" placeholder="Title" data-ng-minlength="3" data-ng-maxlength="200" />
+                                    <span class="error-container"
+                                          ng-show="instanceDetailsForm.title.$dirty && instanceDetailsForm.title.$invalid">
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.title.$error.minlength">
+                                            Title is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.title.$error.maxlength">
+                                            Title cannot be longer than 200 characters
+                                        </small>
+                                    </span>
+                                    <label for="title">Title</label>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="metaDescription" data-ng-model="currentObj.MetaDescription" placeholder="Meta Description" data-ng-minlength="3" data-ng-maxlength="500" />
+                                    <span class="error-container"
+                                          ng-show="instanceDetailsForm.metaDescription.$dirty && instanceDetailsForm.metaDescription.$invalid">
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.metaDescription.$error.minlength">
+                                            Meta Description is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.metaDescription.$error.maxlength">
+                                            Meta Description cannot be longer than 500 characters
+                                        </small>
+                                    </span>
+                                    <label for="metaDescription">Meta Description</label>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="metaKeywords" data-ng-model="currentObj.MetaKeywords" placeholder="Meta Keywords" data-ng-minlength="3" data-ng-maxlength="500" />
+                                    <span class="error-container"
+                                          ng-show="instanceDetailsForm.metaKeywords.$dirty && instanceDetailsForm.metaKeywords.$invalid">
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.metaKeywords.$error.minlength">
+                                            Meta Keywords is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="instanceDetailsForm.metaKeywords.$error.maxlength">
+                                            Meta Keywords cannot be longer than 500 characters
+                                        </small>
+                                    </span>
+                                    <label for="metaKeywords">Meta Keywords</label>
+                                </div>
+                            </div>
+                            <div data-ng-hide="parentObject.ContentType != 'Page' && parentObject.ContentType != 'Partial'">
+                                <div class="form-group">
+                                    <select class="form-control" name="viewTemplate" data-ng-model="currentObj.ViewTemplateId" ng-options="vt.Id as vt.Name for vt in currentObj.PossibleViewTemplates"></select>
+                                    <label for="viewTemplate">View Template</label>
+                                </div>
+                            </div>
+                            <div data-ng-hide="parentObject.ContentType != 'Redirect'">
+                                <div class="form-group">
+                                    <input class="form-control" name="redirectUrl" type="text" data-ng-model="currentObj.RedirectUrl" value="" />
+                                    <label for="redirectUrl">Redirect Url</label>
+                                </div>
+                            </div>
+                            <div data-ng-hide="parentObject.ContentType != 'Download'">
+                                <div class="form-group">
+                                    <input class="form-control" name="downloadPath" type="text" data-ng-model="currentObj.DownloadPath" value="" />
+                                    <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelectorForDownloadFile()" />
+                                    <label for="downloadPath">Download Path</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" name="downloadName" type="text" data-ng-model="currentObj.DownloadName" value="" />
+                                    <label for="downloadName">Download Path</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="version" type="text" data-ng-model="currentObj.Version" value="" readonly="readonly" />
+                                <label for="version">Version</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="createDate" type="text" value="{{currentObj.CreateDate | date : 'longDate'}}" readonly="readonly" />
+                                <label for="createDate">Create Date</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="contentInstanceProportiesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ContentInstanceProporties">
+            <div class="modal-header">
+                <h3 class="modal-title">Content Instance Proporties</h3>
+            </div>
+            <div class="modal-body">
+                <form name="instanceDetailsForm" class="form" novalidate>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="property" data-ng-repeat="prop in parentObject.ViewType.ViewFields">
+                                <div data-ng-switch data-on="prop.Type">
+                                    <div class="form-group" data-ng-switch-when="String">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="String - Multiple Lines">
+                                        <textarea class="form-control" name="{{prop.Name}}" data-ng-model="prop.Value" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Rich Text Box">
+                                        <textarea class="form-control" name="{{prop.Name}}" ck-editor="" data-ng-model="prop.Value" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Date">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" date-picker="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List">
+                                        <select class="form-control" name="{{prop.Name}}" data-ng-model="prop.Value" ng-options="vt.Value as vt.Value for vt in prop.Enum.Values"></select>
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Checkboxes">
+                                        <label class="control-label">{{prop.Name}}</label>
+                                        <div class="form-group">
+                                            <div class="checkbox-inline checkbox-styled col-md-4 col-lg-3" data-ng-repeat="v in prop.Enum.Values">
+                                                <label>
+                                                    <input type="checkbox" checklist-csv-model="prop.Value" checklist-value="v.Value" />
+                                                    <span>{{v.Value}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Radio Buttons">
+                                        <label class="control-label">{{prop.Name}}</label>
+                                        <div class="form-group">
+                                            <div class="radio-inline radio-styled col-md-4 col-lg-3" data-ng-repeat="v in prop.Enum.Values">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" data-ng-value="v.Value" />
+                                                    <span>{{v.Value}}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Predefined List - Filter/Select">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" data-typeahead="v.Value for v in prop.Enum.Values | filter:$viewValue | limitTo:8">
+                                        <label for="{{prop.Name}}">{{prop.Name}} (The value will be appedned to the list if it wasn't found in it)</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Content Url">
+                                        <div class="input-group">
+                                            <div class="input-group-content">
+                                                <input class="form-control" name="{{prop.Name}}" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" readonly="readonly" />
+                                                <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runContentSelector($index)" />
+                                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Auto Increment Number">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" readonly="readonly">
+                                        <label for="{{prop.Name}}">{{prop.Name}} (Auto generated field)</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Boolean">
+                                        <label class="control-label">{{prop.Name}}</label>
+                                        <div class="form-group">
+                                            <div class="radio-inline radio-styled">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" value="True" />
+                                                    <span>True</span>
+                                                </label>
+                                            </div>
+                                            <div class="radio-inline radio-styled">
+                                                <label>
+                                                    <input type="radio" data-ng-model="prop.Value" value="False" />
+                                                    <span>False</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-when="Number">
+                                        <input class="form-control" name="{{prop.Name}}" type="text" data-ng-model="prop.Value" value="" />
+                                        <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                    </div>
+                                    <div class="form-group" data-ng-switch-default>
+                                        <div class="input-group">
+                                            <div class="input-group-content">
+                                                <input class="form-control" name="{{prop.Name}}" id="contentUrlTxt{{prop.Name}}" type="text" data-ng-model="prop.Value" value=""  />
+                                                <label for="{{prop.Name}}">{{prop.Name}}</label>
+                                            </div>
+                                            <div class="input-group-btn">
+                                                <input type="button" value="Select" class="btn btn-default" data-ng-click="runIntentSelector($index)" />
+                                                <input type="button" value="Reset" class="btn btn-default" data-ng-click="resetField($index)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveFieldsValues()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="contentsSortingForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ContentsSorting">
+            <div class="modal-header">
+                <h3 class="modal-title">Sorting Contents</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group" data-ui-sortable="SortableOptions" data-ng-model="sortingContents">
+                    <li class="list-group-item" data-ng-repeat="cc in sortingContents"><div class="handle">{{cc.Name}}<i class="pull-right glyphicon fa fa-arrows"></i></div></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveContentsSorting()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="contentDomainsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.Domains">
+            <div class="modal-header">
+                <h3 class="modal-title">Linking Domains to Content Trees</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="domain in currentObj.DomainAliases">{{domain}} <i class="fa fa-times extMenuChoice" data-ng-click="removeDomainFromContent($index)"></i></li>
+                </ul>
+                <input type="button" value="Add" class="btn btn-primary" data-ng-click="addDomainToContent()" />
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="childrenNodesForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.ChildrenNodes">
+            <div class="modal-header">
+                <h3 class="modal-title">Children Nodes</h3>
+            </div>
+            <div class="modal-body">
+                <input type="button" value="Delete Selected" class="btn btn-default" data-ng-click="deleteGridContents()" />
+                <input type="button" value="New Child Content" class="btn btn-primary" data-ng-click="createGridNode()" />
+                <div class="gridStyle" ng-grid="gridOptions">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Contents</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <a data-ng-click="createRootNode()">Create New Content</a>
+            </div>
+            @*<div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Content</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <label class="control-label">What to create</label>
+                        <div class="form-group">
+                            <div class="radio-inline radio-styled">
+                                <label>
+                                    <input type="radio" data-ng-model="newNode.CreatingMode" value="0" />
+                                    <span>Content</span>
+                                </label>
+                            </div>
+                            <div class="radio-inline radio-styled">
+                                <label>
+                                    <input type="radio" data-ng-model="newNode.CreatingMode" value="1" />
+                                    <span>Version of Content</span>
+                                </label>
+                            </div>
+                            <div class="radio-inline radio-styled">
+                                <label>
+                                    <input type="radio" data-ng-model="newNode.CreatingMode" value="2" />
+                                    <span>Both (a content with a version of it using the same name)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newNode.Name" value="" required data-ng-minlength="2" data-ng-maxlength="150" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Name cannot be longer than 150 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                    <div data-ng-show="newNode.CreatingMode=='0' || newNode.CreatingMode=='2'">
+                        <div class="form-group">
+                            <select class="form-control" data-ng-model="newNode.ContentType" name="type" ng-options="nt.Value as nt.Name for nt in NodeTypes"></select>
+                            <label for="type">Type of content</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" name="urlName" type="text" data-ng-model="newNode.UrlName" value="" />
+                            <label for="urlName">Url Name</label>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="viewTypeId" data-ng-model="newNode.ViewTypeId" ng-options="v.Id as v.Name for v in viewTypes">
+                                <option value=""></option>
+                            </select>
+                            <label for="viewTypeId">View Type</label>
+                        </div>
+                    </div>
+                    <div data-ng-show="newNode.CreatingMode=='1'">
+                        <div class="form-group">
+                            <select class="form-control" name="viewTemplateId" data-ng-model="newNode.ViewTemplateId" ng-options="vt.Id as vt.Name for vt in viewTemplates"></select>
+                            <label for="viewTemplateId">View Template</label>
+                        </div>
+                    </div>
+                    <div data-ng-show="newNode.CreatingMode=='2'">
+                        <div class="form-group">
+                            <select class="form-control" name="viewTemplateId" data-ng-model="newNode.ViewTemplateId" ng-options="vt.Id as vt.Name for vt in currentViewType.TypeTemplates"></select>
+                            <label for="viewTemplateId">View Template</label>
+                        </div>
+                    </div>
+                    <div data-ng-show="newNode.CreatingMode=='2' || newNode.CreatingMode=='1'">
+                        <div class="form-group">
+                            <select class="form-control" name="language" data-ng-model="newNode.Language" ng-options="lang.Value as lang.Name for lang in languages">
+                                <option value="">Default</option>
+                            </select>
+                            <label for="language">Language</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="addDomain.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Domain to Content</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" data-ng-model="newDomain.Name" value="" required data-ng-minlength="3" data-ng-maxlength="100" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.required">
+                                Domain is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.minlength">
+                                Domain is required to be at least 2 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Domain cannot be longer than 100 characters
+                            </small>
+                        </span>
+                        <label for="name">Domain</label>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="SelectContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Content Selector</h3>
+            </div>
+            <div class="modal-body" data-ng-init="initialize()">
+                <div class="textField">Choose one of the contents from the tree?</div>
+                <div class="valueField" id="contentTree_contentSelector">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+        <script type="text/ng-template" id="cloneForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Clone Content</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" class="form" novalidate>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="suffix" data-ng-model="newNode.Suffix" value="" placeholder="Suffix" required data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="createForm.form.name.$dirty && createForm.form.name.$invalid">
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.required">
+                                Suffix is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="createForm.form.name.$error.maxlength">
+                                Suffix cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="suffix">Suffix</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}

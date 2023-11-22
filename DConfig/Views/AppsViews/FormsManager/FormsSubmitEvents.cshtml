@@ -1,0 +1,316 @@
+﻿@{
+    Layout = "~/Views/AppsViews/FormsManager/_FormsManagerLayout.cshtml";
+}
+@section SearchListTopMenu{
+    <input type="text" name="formsSearchBox" id="formsSearchBox" />
+
+}
+@section DetailsTopMenu{
+}
+@section SearchList{
+    <div id="formsTreeContainer">
+    </div>
+}
+@section Details{
+    <div id="formsContainerContent">
+        <div id="detailsForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.EventDetails">
+            <div class="modal-header">
+                <h3 class="modal-title">Form Submit Event Details</h3>
+            </div>
+            <div class="modal-body">
+                <form name="detialsForm" novalidate class="form">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input class="form-control" type="text" data-ng-model="currentObj.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                <span class="error-container"
+                                      ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.required">
+                                        Name is required.
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.minlength">
+                                        Name is required to be at least 3 characters
+                                    </small>
+                                    <small class="error"
+                                           ng-show="detialsForm.name.$error.maxlength">
+                                        Name cannot be longer than 50 characters
+                                    </small>
+                                </span>
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" data-ng-model="currentObj.Type" type="text" name="type" readonly="readonly" />
+                                <label for="type">Event type</label>
+                            </div>
+                            <div data-ng-hide="currentObj.Type != 'Email Event'">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="from" data-ng-model="currentObj.From" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="createForm.form.from.$dirty && createForm.form.from.$invalid">
+                                        <small class="error"
+                                               ng-show="createForm.form.from.$error.minlength">
+                                            From is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.from.$error.maxlength">
+                                            From cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="from">From</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="bFrom" class="form-control" data-ng-model="currentObj.FromBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                                    <label for="bFrom">Bind From Email account to Form Field</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="to" data-ng-model="currentObj.To" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="createForm.form.to.$dirty && createForm.form.to.$invalid">
+                                        <small class="error"
+                                               ng-show="createForm.form.to.$error.required">
+                                            To is required.
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.to.$error.minlength">
+                                            To is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.to.$error.maxlength">
+                                            To cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="to">To</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="bTo" class="form-control" data-ng-model="currentObj.ToBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                                    <label for="bTo">Bind To Email account to Form Field</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="cc" data-ng-model="currentObj.Cc" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="createForm.form.cc.$dirty && createForm.form.cc.$invalid">
+                                        <small class="error"
+                                               ng-show="createForm.form.cc.$error.minlength">
+                                            Cc is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.cc.$error.maxlength">
+                                            Cc cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="cc">Cc</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="bCc" class="form-control" data-ng-model="currentObj.CcBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                                    <label for="bCc">Bind Cc Email account to Form Field</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="bCC" data-ng-model="currentObj.Bcc" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="createForm.form.bcc.$dirty && createForm.form.bcc.$invalid">
+                                        <small class="error"
+                                               ng-show="createForm.form.bcc.$error.minlength">
+                                            Bcc is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.bcc.$error.maxlength">
+                                            Bcc cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="bCC">Bcc</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="bBcc" class="form-control" data-ng-model="currentObj.BccBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                                    <label for="bBcc">Bind Bcc Email account to Form Field</label>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="subject" data-ng-model="currentObj.Subject" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                                    <span class="error-container"
+                                          ng-show="createForm.form.subject.$dirty && createForm.form.subject.$invalid">
+                                        <small class="error"
+                                               ng-show="createForm.form.subject.$error.required">
+                                            Subject is required.
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.subject.$error.minlength">
+                                            Subject is required to be at least 3 characters
+                                        </small>
+                                        <small class="error"
+                                               ng-show="createForm.form.subject.$error.maxlength">
+                                            Subject cannot be longer than 50 characters
+                                        </small>
+                                    </span>
+                                    <label for="subject">Subject</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="template" class="form-control" data-ng-model="currentObj.TemplateId" ng-options="vt.Id as vt.Name for vt in Templates"></select>
+                                    <label for="template">Template</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+            </div>
+        </div>
+        <div id="noneForm" class="detailsForm" data-ng-hide="state != DetailsPanelStates.None">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title">Form Submit Events</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+            </div>
+            @*<div class="modal-footer">
+                    <input type="button" value="Update" class="btn btn-primary" data-ng-click="saveChanges()" />
+                    <input type="button" value="Cancel" class="btn btn-default" data-ng-click="closeDetailsForm()" />
+                </div>*@
+        </div>
+    </div>
+    <div>
+        <script type="text/ng-template" id="createForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Create Event</h3>
+            </div>
+            <div class="modal-body">
+                <form name="createForm.form" novalidate class="form">
+                    <div class="form-group">
+                        <input class="form-control" type="text" data-ng-model="newNode.Name" value="" name="name" required data-ng-minlength="3" data-ng-maxlength="50" />
+                        <span class="error-container"
+                              ng-show="detialsForm.name.$dirty && detialsForm.name.$invalid">
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.required">
+                                Name is required.
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.minlength">
+                                Name is required to be at least 3 characters
+                            </small>
+                            <small class="error"
+                                   ng-show="detialsForm.name.$error.maxlength">
+                                Name cannot be longer than 50 characters
+                            </small>
+                        </span>
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" data-ng-model="newNode.Type" name="type" ng-options="nt.Name as nt.Name for nt in EventsTypes"></select>
+                        <label for="type">Event type</label>
+                    </div>
+                    <div data-ng-hide="newNode.Type != 'Email Event'">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="from" data-ng-model="newNode.From" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                            <span class="error-container"
+                                  ng-show="createForm.form.from.$dirty && createForm.form.from.$invalid">
+                                <small class="error"
+                                       ng-show="createForm.form.from.$error.minlength">
+                                    From is required to be at least 3 characters
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.from.$error.maxlength">
+                                    From cannot be longer than 50 characters
+                                </small>
+                            </span>
+                            <label for="from">From</label>
+                        </div>
+                        <div class="form-group">
+                            <select name="bFrom" class="form-control" data-ng-model="newNode.FromBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                            <label for="bFrom">Bind From Email account to Form Field</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="to" data-ng-model="newNode.To" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                            <span class="error-container"
+                                  ng-show="createForm.form.to.$dirty && createForm.form.to.$invalid">
+                                <small class="error"
+                                       ng-show="createForm.form.to.$error.required">
+                                    To is required.
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.to.$error.minlength">
+                                    To is required to be at least 3 characters
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.to.$error.maxlength">
+                                    To cannot be longer than 50 characters
+                                </small>
+                            </span>
+                            <label for="to">To</label>
+                        </div>
+                        <div class="form-group">
+                            <select name="bTo" class="form-control" data-ng-model="newNode.ToBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                            <label for="bTo">Bind To Email account to Form Field</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="cc" data-ng-model="newNode.Cc" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                            <span class="error-container"
+                                  ng-show="createForm.form.cc.$dirty && createForm.form.cc.$invalid">
+                                <small class="error"
+                                       ng-show="createForm.form.cc.$error.minlength">
+                                    Cc is required to be at least 3 characters
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.cc.$error.maxlength">
+                                    Cc cannot be longer than 50 characters
+                                </small>
+                            </span>
+                            <label for="cc">Cc</label>
+                        </div>
+                        <div class="form-group">
+                            <select name="bCc" class="form-control" data-ng-model="newNode.CcBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                            <label for="bCc">Bind Cc Email account to Form Field</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="bCC" data-ng-model="newNode.Bcc" value="" data-ng-minlength="3" data-ng-maxlength="50" />
+                            <span class="error-container"
+                                  ng-show="createForm.form.bcc.$dirty && createForm.form.bcc.$invalid">
+                                <small class="error"
+                                       ng-show="createForm.form.bcc.$error.minlength">
+                                    Bcc is required to be at least 3 characters
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.bcc.$error.maxlength">
+                                    Bcc cannot be longer than 50 characters
+                                </small>
+                            </span>
+                            <label for="bCC">Bcc</label>
+                        </div>
+                        <div class="form-group">
+                            <select name="bBcc" class="form-control" data-ng-model="newNode.BccBindedFieldId" ng-options="vt.Id as vt.Name for vt in parentObject.FormFields"></select>
+                            <label for="bBcc">Bind Bcc Email account to Form Field</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="subject" data-ng-model="newNode.Subject" value="" required data-ng-minlength="3" data-ng-maxlength="50" />
+                            <span class="error-container"
+                                  ng-show="createForm.form.subject.$dirty && createForm.form.subject.$invalid">
+                                <small class="error"
+                                       ng-show="createForm.form.subject.$error.required">
+                                    Subject is required.
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.subject.$error.minlength">
+                                    Subject is required to be at least 3 characters
+                                </small>
+                                <small class="error"
+                                       ng-show="createForm.form.subject.$error.maxlength">
+                                    Subject cannot be longer than 50 characters
+                                </small>
+                            </span>
+                            <label for="subject">Subject</label>
+                        </div>
+                        <div class="form-group">
+                            <select name="template" class="form-control" data-ng-model="newNode.TemplateId" ng-options="vt.Id as vt.Name for vt in Templates"></select>
+                            <label for="template">Template</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" ng-click="ok()" value="OK">
+                <input type="button" class="btn btn-default" ng-click="cancel()" value="Cancel">
+            </div>
+        </script>
+    </div>
+}
